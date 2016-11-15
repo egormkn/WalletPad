@@ -20,7 +20,7 @@
             android:title="Tools" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Communicate" android:checkableBehavior="single">
         <menu>
             <item
                 android:id="@+id/nav_share"
