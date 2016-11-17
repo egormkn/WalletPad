@@ -1,10 +1,12 @@
 package su.gear.walletpad;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -15,25 +17,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import su.gear.walletpad.fragments.MainFragment;
+import su.gear.walletpad.fragments.StatisticsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    DrawerLayout drawer;
     MainFragment fragment_main;
+    StatisticsFragment fragment_statistics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragment_main = new MainFragment();
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -42,6 +46,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        fragment_main = new MainFragment();
+        fragment_statistics = new StatisticsFragment();
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment_main);
         transaction.commit();
@@ -49,7 +56,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -73,6 +79,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast toast = Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_SHORT);
+            toast.show();
             return true;
         }
 
@@ -87,25 +95,30 @@ public class MainActivity extends AppCompatActivity
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        // transaction.addToBackStack(null);
+        Fragment newFragment = null;
 
-        if (id == R.id.nav_camera) {
-            transaction.replace(R.id.fragment_container, fragment_main);
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.menu_summary) {
+            newFragment = fragment_main;
+        /*} else if (id == R.id.menu_history) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.menu_statistics) {*/
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            /*EditText editText = (EditText) findViewById(R.id.edit_message);
+            String message = editText.getText().toString();
+            intent.putExtra(EXTRA_MESSAGE, message);*/
+            startActivity(intent);
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        } else {
+            newFragment = fragment_statistics;
         }
 
+
+        transaction.replace(R.id.fragment_container, newFragment);
         transaction.commit();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

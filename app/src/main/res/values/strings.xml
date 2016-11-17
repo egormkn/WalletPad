@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">WalletPad</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -8,6 +9,20 @@
     <string name="action_share">Share</string>
 
     <string name="tab_summary">Summary</string>
-    <string name="tab_income">Income</string>
-    <string name="tab_expenses">Expenses</string>
+    <string name="tab_operations">Operations</string>
+    <string name="tab_plans">Plans</string>
+
+    <string name="nav_sign_in">Sign in</string>
+    <string name="nav_summary">Summary</string>
+    <string name="nav_history">History</string>
+    <string name="nav_statistics">Statistics</string>
+    <string name="nav_budget">Budget</string>
+    <string name="nav_tools">Tools</string>
+    <string name="nav_other">Other</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_about">About</string>
+    <string name="nav_rate">Rate us</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
