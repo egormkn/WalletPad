@@ -1,54 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/colorSecondary">
 
     <RelativeLayout
-        android:layout_height="match_parent"
+        android:id="@+id/user"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:visibility="gone">
+        android:padding="8dp"
+        android:clickable="true"
+        android:background="?android:attr/selectableItemBackground"
+        tools:targetApi="honeycomb">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/avatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentLeft="true"
-            app:srcCompat="@android:drawable/sym_def_app_icon"
-            android:contentDescription="" />
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            app:srcCompat="@drawable/ic_person"
+            android:src="@drawable/ic_person"
+            tools:ignore="VectorDrawableCompat" />
 
         <TextView
             android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:text="Android Studio"
+            tools:text="Egor Makarenko"
+            android:layout_alignTop="@+id/avatar"
             android:layout_toRightOf="@id/avatar"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            android:layout_toEndOf="@+id/avatar"
+            android:paddingTop="2dp"
+            android:textSize="16sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/textColorMain"/>
 
         <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            android:id="@+id/sync_info"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="android.studio@android.com" />
+            tools:text="Last sync: 2 days ago"
+            android:layout_toRightOf="@id/avatar"
+            android:layout_toEndOf="@+id/avatar"
+            android:paddingBottom="2dp"
+            android:layout_alignBottom="@+id/avatar"
+            android:textSize="14sp"
+            android:textColor="@color/textColorGray"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     </RelativeLayout>
 
     <Button
+        android:visibility="gone"
+        android:id="@+id/sign_in"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="0dp"
-        android:paddingStart="16dp"
-        android:paddingLeft="16dp"
-        android:paddingEnd="16dp"
-        android:paddingRight="16dp"
+        android:padding="@dimen/sign_in_padding"
         android:drawableRight="@drawable/ic_arrow_right"
         android:drawableEnd="@drawable/ic_arrow_right"
         android:background="@drawable/button"
         android:text="@string/nav_sign_in"
         android:textColor="@color/navSignIn"
-        android:textSize="17sp"
+        android:textSize="@dimen/sign_in_text"
         android:gravity="center|start" />
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/user_loader"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="8dp">
+
+        <ProgressBar
+            android:id="@+id/auth_progress"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:indeterminate="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/authorization"
+            android:layout_alignTop="@+id/auth_progress"
+            android:layout_alignBottom="@+id/auth_progress"
+            android:layout_toRightOf="@id/auth_progress"
+            android:layout_toEndOf="@+id/auth_progress"
+            android:gravity="center_vertical|start"
+            android:textSize="16sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/textColorMain"/>
+
+    </RelativeLayout>
 
 </FrameLayout>

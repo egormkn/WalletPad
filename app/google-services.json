@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "332933317887",
+    "firebase_url": "https://walletpad.firebaseio.com",
+    "project_id": "walletpad",
+    "storage_bucket": "walletpad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:332933317887:android:904fc33af3f40384",
+        "android_client_info": {
+          "package_name": "su.gear.walletpad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "332933317887-nrpoqr5hfs048dlvdac8cm2qjadsil7v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "su.gear.walletpad",
+            "certificate_hash": "E27889BB35AFEEE1618FD7E819F4F93886A17303"
+          }
+        },
+        {
+          "client_id": "332933317887-h2es5afktanksue8jnq95bp08iuba1sn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFt8u5XPPGeQndZZDRP0i3QnGJOS6cPiI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "332933317887-h2es5afktanksue8jnq95bp08iuba1sn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
