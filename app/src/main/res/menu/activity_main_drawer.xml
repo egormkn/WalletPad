@@ -2,45 +2,48 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-
         <item
-            android:id="@+id/menu_summary"
-            android:checked="true"
+            android:id="@+id/nav_summary"
+            android:title="@string/nav_summary"
             android:icon="@drawable/ic_summary"
-            android:title="@string/nav_summary" />
+            android:checked="true" />
         <item
-            android:id="@+id/menu_history"
-            android:icon="@drawable/ic_history"
-            android:title="@string/nav_history" />
+            android:id="@+id/nav_operations"
+            android:title="@string/nav_operations"
+            android:icon="@drawable/ic_operations" />
         <item
-            android:id="@+id/menu_statistics"
-            android:icon="@drawable/ic_statistics"
-            android:title="@string/nav_statistics" />
+            android:id="@+id/nav_budget"
+            android:title="@string/nav_budget"
+            android:icon="@drawable/ic_budget" />
         <item
-            android:id="@+id/menu_budget"
-            android:icon="@drawable/ic_budget"
-            android:title="@string/nav_budget" />
+            android:id="@+id/nav_statistics"
+            android:title="@string/nav_statistics"
+            android:icon="@drawable/ic_statistics" />
 
         <item
             android:title="@string/nav_tools"
             android:checkable="false">
             <menu>
                 <item
-                    android:id="@+id/menu_share"
-                    android:checkable="true"
-                    android:title="Import from SMS" />
+                    android:id="@+id/nav_import"
+                    android:title="@string/nav_import"
+                    android:icon="@drawable/ic_import"
+                    android:checkable="true" />
                 <item
-                    android:id="@+id/menu_send"
-                    android:checkable="true"
-                    android:title="Currency converter" />
+                    android:id="@+id/nav_banks"
+                    android:title="@string/nav_banks"
+                    android:icon="@drawable/ic_banks"
+                    android:checkable="true" />
                 <item
-                    android:id="@+id/nav_send2"
-                    android:checkable="true"
-                    android:title="Percent calculator" />
+                    android:id="@+id/nav_converter"
+                    android:title="@string/nav_converter"
+                    android:icon="@drawable/ic_converter"
+                    android:checkable="true" />
                 <item
-                    android:id="@+id/nav_shared_goals"
-                    android:checkable="true"
-                    android:title="Export to CSV" />
+                    android:id="@+id/nav_export"
+                    android:title="@string/nav_export"
+                    android:icon="@drawable/ic_export"
+                    android:checkable="true" />
             </menu>
         </item>
 
@@ -50,17 +53,13 @@
             android:checkable="false">
             <menu>
                 <item
-                    android:id="@+id/menu_settings"
-                    android:icon="@drawable/ic_settings"
-                    android:title="@string/nav_settings" />
-                <item
-                    android:id="@+id/nav_rate"
-                    android:icon="@drawable/ic_rate"
-                    android:title="@string/nav_rate" />
+                    android:id="@+id/nav_settings"
+                    android:title="@string/nav_settings"
+                    android:icon="@drawable/ic_settings" />
                 <item
                     android:id="@+id/nav_about"
-                    android:icon="@drawable/ic_about"
-                    android:title="@string/nav_about" />
+                    android:title="@string/nav_about"
+                    android:icon="@drawable/ic_about" />
             </menu>
         </item>
 

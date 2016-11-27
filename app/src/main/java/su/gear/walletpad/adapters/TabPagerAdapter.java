@@ -49,8 +49,8 @@ public class TabPagerAdapter extends PagerAdapter {
     private enum TabPagerEnum {
 
         TAB1(R.string.tab_summary, R.layout.tab_summary),
-        TAB2(R.string.tab_plans, R.layout.tab_operations),
-        TAB3(R.string.tab_operations, R.layout.tab_plans);
+        TAB2(R.string.tab_wallets, R.layout.tab_wallets),
+        TAB3(R.string.tab_plans, R.layout.tab_plans);
 
         private int titleResId;
         private int layoutResId;

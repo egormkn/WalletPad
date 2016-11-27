@@ -32,6 +32,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.ActionCodeResult;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,7 +40,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import su.gear.walletpad.fragments.MainFragment;
+import su.gear.walletpad.fragments.BanksFragment;
+import su.gear.walletpad.fragments.BudgetFragment;
+import su.gear.walletpad.fragments.ConverterFragment;
+import su.gear.walletpad.fragments.ExportFragment;
+import su.gear.walletpad.fragments.ImportFragment;
+import su.gear.walletpad.fragments.OperationsFragment;
+import su.gear.walletpad.fragments.SummaryFragment;
 import su.gear.walletpad.fragments.StatisticsFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -52,8 +59,16 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private Button signInButton;
     private RelativeLayout userInfo;
-    private MainFragment fragment_main;
+
+    private SummaryFragment fragment_summary;
+    private OperationsFragment fragment_operations;
+    private BudgetFragment fragment_budget;
     private StatisticsFragment fragment_statistics;
+
+    private ImportFragment fragment_import;
+    private BanksFragment fragment_banks;
+    private ConverterFragment fragment_converter;
+    private ExportFragment fragment_export;
 
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mAuth;
@@ -77,11 +92,18 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fragment_main = new MainFragment();
+        fragment_summary = new SummaryFragment();
+        fragment_operations = new OperationsFragment();
+        fragment_budget = new BudgetFragment();
         fragment_statistics = new StatisticsFragment();
 
+        fragment_import = new ImportFragment();
+        fragment_banks = new BanksFragment();
+        fragment_converter = new ConverterFragment();
+        fragment_export = new ExportFragment();
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment_main);
+        transaction.replace(R.id.fragment_container, fragment_summary);
         transaction.commit();
 
 
@@ -285,16 +307,32 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
         Fragment newFragment = null;
 
-        if (id == R.id.menu_summary) {
-            newFragment = fragment_main;
-        /*} else if (id == R.id.menu_history) {
-
-        } else if (id == R.id.menu_statistics) {*/
-
+        if (id == R.id.nav_summary) {
+            newFragment = fragment_summary;
+        } else if (id == R.id.nav_operations) {
+            newFragment = fragment_operations;
+        } else if (id == R.id.nav_budget) {
+            newFragment = fragment_budget;
+        } else if (id == R.id.nav_statistics) {
+            newFragment = fragment_statistics;
+        } else if (id == R.id.nav_import) {
+            newFragment = fragment_import;
+        } else if (id == R.id.nav_banks) {
+            newFragment = fragment_banks;
+        } else if (id == R.id.nav_converter) {
+            newFragment = fragment_converter;
+        } else if (id == R.id.nav_export) {
+            newFragment = fragment_export;
+        } else if (id == R.id.nav_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            /*EditText editText = (EditText) findViewById(R.id.edit_message);
+            String message = editText.getText().toString();
+            intent.putExtra(EXTRA_MESSAGE, message);*/
+            startActivity(intent);
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
         } else if (id == R.id.nav_about) {
             Intent intent = new Intent(this, AboutActivity.class);
             /*EditText editText = (EditText) findViewById(R.id.edit_message);
@@ -304,10 +342,10 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
             return true;
         } else {
-            newFragment = fragment_statistics;
+            newFragment = fragment_summary;
         }
 
-
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, newFragment);
         transaction.commit();
 
