@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "su.gear.walletpad"
         minSdkVersion 11
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -37,10 +37,11 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.6.1'
 
     // FireBase
-    compile 'com.google.firebase:firebase-auth:9.8.0'
+    compile 'com.google.firebase:firebase-auth:10.0.0'
+    compile 'com.google.firebase:firebase-crash:9.0.0'
 
     // Google
-    compile 'com.google.android.gms:play-services-auth:9.8.0'
+    compile 'com.google.android.gms:play-services-auth:10.0.0'
 
     testCompile 'junit:junit:4.12'
 }
