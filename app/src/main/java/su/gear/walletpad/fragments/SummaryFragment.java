@@ -8,12 +8,21 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import su.gear.walletpad.R;
+import su.gear.walletpad.adapters.OperationsAdapter;
 import su.gear.walletpad.adapters.TabPagerAdapter;
+import su.gear.walletpad.model.Operation;
+import su.gear.walletpad.model.OperationsListItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +43,8 @@ public class SummaryFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private List<OperationsListItem> operations;
 
     public SummaryFragment() {
         // Required empty public constructor
@@ -64,6 +75,12 @@ public class SummaryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        operations = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++) {
+            operations.add(new Operation(i, Operation.Type.INCOME, "RUB", 100.0, "Описание", "Category", null, 100));
+        }
     }
 
     @Override
@@ -84,13 +101,21 @@ public class SummaryFragment extends Fragment {
             }
         });
 
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tablayout);
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new TabPagerAdapter(getActivity()));
+        TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(getActivity());
+        viewPager.setAdapter(tabPagerAdapter);
+
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
 
-        //viewPager.setAdapter(new TabPagerAdapter(fragmentView.getContext()));
+
+        /*View test = viewPager.findViewWithTag(R.layout.tab_summary);
+        RecyclerView recyclerView = (RecyclerView) test.findViewById(R.id.tab_summary_recycler);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        OperationsAdapter adapter = new OperationsAdapter(getActivity(), operations);
+        recyclerView.setAdapter(adapter);*/
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -6,7 +6,7 @@ import java.util.List;
  * Объект операции (доход/расход/перевод...)
  */
 
-public class Operation implements RecyclerViewItem /* Parcelable */ {
+public class Operation implements OperationsListItem /* Parcelable */ {
 
     public enum Type {
         INCOME, EXPENSE, TRANSFER

@@ -9,11 +9,12 @@ public class WalletPadApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler(){
+        // FireBase Crash Reporting
+        /*Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler(){
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {
                 FirebaseCrash.report(ex);
             }
-        });
+        });*/
     }
 }
