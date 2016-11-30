@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="fbcore-0.14.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.facebook.fresco/fbcore/0.14.0/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.facebook.fresco/fbcore/0.14.0/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.facebook.fresco/fbcore/0.14.0/d5ba36cca5dc99042fa03498676e1985b2f062a9/fbcore-0.14.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
