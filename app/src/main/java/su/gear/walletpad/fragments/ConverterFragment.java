@@ -1,14 +1,18 @@
 package su.gear.walletpad.fragments;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import su.gear.walletpad.R;
+import su.gear.walletpad.converter.ConverterResult;
+import su.gear.walletpad.converter.CurrencyConverter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +63,36 @@ public class ConverterFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        Log.d ("Converter", "Me eme em");
+
+        final ConverterFragment frag = this;
+
+        Bundle args = new Bundle ();
+        args.putString ("from", "RUB");
+        args.putString ("to", "USD");
+        args.putInt ("amount", 100);
+
+        getActivity().getSupportLoaderManager().restartLoader (0, args, new LoaderManager.LoaderCallbacks <ConverterResult> () {
+
+            public Loader <ConverterResult> onCreateLoader (int id, Bundle args) {
+                String from   = args.getString ("from");
+                String to     = args.getString ("to");
+                int    amount = args.getInt ("amount");
+
+                Log.d ("ConverterFragment", "onCreateLoader");
+                return new CurrencyConverter (frag.getContext (), from, to, amount);
+            }
+
+            public void onLoadFinished (Loader <ConverterResult> loader, ConverterResult result) {
+                Log.d ("ConverterFragment", result.getResult () + "");
+            }
+
+            public void onLoaderReset(Loader <ConverterResult> loader) {
+                // Do nothing
+            }
+
+        });
     }
 
     @Override

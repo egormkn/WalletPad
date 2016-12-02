@@ -1,8 +1,7 @@
 package su.gear.walletpad.converter;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.net.Uri;
+import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
 import com.facebook.stetho.urlconnection.StethoURLConnectionManager;
@@ -16,7 +15,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import su.gear.walletpad.utils.IOUtils;
 
@@ -24,29 +22,34 @@ import su.gear.walletpad.utils.IOUtils;
  * Created by Андрей on 29.11.2016.
  */
 
-public class CurrencyConverter extends AsyncTaskLoader <Double> {
+public class CurrencyConverter extends AsyncTaskLoader<ConverterResult> {
 
     private final String TAG = "CurrencyConverter";
 
-    private double start;
+    private double amount;
     private String fromCode, toCode;
     private ConverterResult result;
 
-    public CurrencyConverter (Context context, String fromNumCode, String toNumCode, double start) {
+    public CurrencyConverter (Context context, String fromNumCode, String toNumCode, int amount) {
         super (context);
 
-        this.result   = ConverterResult.NOT_STARTED;
         this.fromCode = fromNumCode;
         this.toCode   = toNumCode;
-        this.start    = start;
+        this.amount = amount;
+
+        Log.d (TAG, "Constructor created");
     }
 
-    public Double loadInBackground () {
+    protected void onStartLoading () {
+        forceLoad ();
+        Log.d (TAG, "onStartLoad");
+    }
+
+    public ConverterResult loadInBackground () {
+        Log.d (TAG, "Starting loading in back");
         StethoURLConnectionManager connectionManager
                                         = new StethoURLConnectionManager ("API");
-
-        result = ConverterResult.NOT_STARTED;
-        double res  = 0D;
+        result = new ConverterResult ();
 
         HttpURLConnection httpConnection = _createHttpConnection ();
         InputStream          inputStream = null;
@@ -57,30 +60,43 @@ public class CurrencyConverter extends AsyncTaskLoader <Double> {
             httpConnection.connect        ();
             connectionManager.postConnect ();
 
+            Log.d (TAG, "Before checking response code");
             if (httpConnection.getResponseCode () == 200) {
+                Log.d (TAG, "Response code is OK");
                 inputStream = httpConnection.getInputStream ();
                 inputStream = connectionManager.interpretResponseStream (inputStream);
 
                 currencies = _parseAnswer (inputStream);
+                Log.d (TAG, "After parser situation");
+
+                //Stop if everything is bad
+                if (currencies == null) {
+                    Log.e (TAG, "Failed to parse answer from requst :(");
+                    result.setStatus (ConverterResult.Status.PARSE_FAILED);
+
+                    return result;
+                }
+
+                //Counting the result
                 if (currencies.containsKey (fromCode)) {
                     if (currencies.containsKey (toCode)) {
                         Double from = currencies.get (fromCode);
                         Double to   = currencies.get (toCode);
 
-                        res = start * to / from;
-                        result = ConverterResult.LOADED;
+                        result.setResult (amount * to / from);
+                        result.setStatus (ConverterResult.Status.READY);
                     } else {
                         Log.e (TAG, "Currency `" + toCode + "` ratio was not found");
-                        result = ConverterResult.CONVERTING_FALIED;
+                        result.setStatus (ConverterResult.Status.PARSE_FAILED);
                     }
                 } else {
                     Log.e (TAG, "Currency `" + toCode + "` ratio was not found");
-                    result = ConverterResult.CONVERTING_FALIED;
+                    result.setStatus (ConverterResult.Status.PARSE_FAILED);
                 }
             } else {
                 Log.e (TAG, "Server answer not 200 code: HTTP Request Code "
                                 + httpConnection.getResponseCode ());
-                result = ConverterResult.LOADING_FALIED;
+                result.setStatus (ConverterResult.Status.PARSE_FAILED);
             }
         } catch (Exception e) {
             Log.e (TAG, "Loading failed due to `" + e.getMessage () + "`");
@@ -88,24 +104,15 @@ public class CurrencyConverter extends AsyncTaskLoader <Double> {
 
             if (IOUtils.isConnectionAvailable (getContext (), false)) {
                 //Connection is between dead and alive
-                result = ConverterResult.CONNECTION_FAILED;
+                result.setStatus (ConverterResult.Status.PARSE_FAILED);
             } else {
                 //What can we do without Almighty?
-                result = ConverterResult.NO_INTERNET;
+                result.setStatus (ConverterResult.Status.NO_INTERNET);
             }
         }
 
-        if (result == ConverterResult.LOADED) { return res; }
-        else                                  { return -1D; }
-    }
-
-    public ConverterResult getResult () {
+        Log.d (TAG, "Converter finished");
         return result;
-    }
-
-    private HttpURLConnection _createHttpConnection () {
-        String basic = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml";
-        return _createHttpConnection (basic);
     }
 
     private Map <String, Double> _parseAnswer (InputStream input) throws Exception {
@@ -117,6 +124,7 @@ public class CurrencyConverter extends AsyncTaskLoader <Double> {
 
         Map <String, Double> currencies = new HashMap <> ();
 
+        Log.d (TAG, "Start parsing");
         int eventType = parser.getEventType ();
         while (eventType != XmlPullParser.END_DOCUMENT) {
             if (eventType == XmlPullParser.START_TAG) {
@@ -125,19 +133,26 @@ public class CurrencyConverter extends AsyncTaskLoader <Double> {
 
                 if (name.equals ("Cube")) {
                     if (parser.getAttributeCount () == 2) {
-                        String currecy = parser.getAttributeValue (0);
+                        String currency = parser.getAttributeValue (0);
                         String ration  = parser.getAttributeValue (1);
                         Double value   = Double.parseDouble (ration);
 
                         Log.d (TAG, "It's a currency node: "
-                                        + currecy + " - " + ration);
-                        currencies.put (currecy, value);
+                                        + currency + " - " + ration);
+                        currencies.put (currency, value);
                     }
                 }
             }
+
+            eventType = parser.next ();
         }
 
-        return null;
+        return currencies;
+    }
+
+    private HttpURLConnection _createHttpConnection () {
+        String basic = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml";
+        return _createHttpConnection (basic);
     }
 
     private HttpURLConnection _createHttpConnection (String url) {
