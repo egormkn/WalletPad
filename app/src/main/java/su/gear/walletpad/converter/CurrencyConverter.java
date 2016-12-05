@@ -30,7 +30,7 @@ public class CurrencyConverter extends AsyncTaskLoader<ConverterResult> {
     private String fromCode, toCode;
     private ConverterResult result;
 
-    public CurrencyConverter (Context context, String fromNumCode, String toNumCode, int amount) {
+    public CurrencyConverter (Context context, String fromNumCode, String toNumCode, double amount) {
         super (context);
 
         this.fromCode = fromNumCode;

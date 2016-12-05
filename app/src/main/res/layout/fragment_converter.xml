@@ -12,31 +12,123 @@
         android:text="CONVERTER" />-->
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center_horizontal">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="8dp"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.125"
+                android:layout_gravity="start"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                android:text="From"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                android:text="Amount"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.125"
+                android:layout_gravity="end"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                android:text="To  "/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_margin="8dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:weightSum="1"
             android:background="@drawable/converter_shape">
 
             <Spinner
+                android:id="@+id/fromCUR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="80dp"
+                android:layout_weight="0.125"
+                android:textAlignment="center"
                 android:entries="@array/currencies"
                 />
 
             <EditText
+                android:id="@+id/amountCUR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="200dp"
                 android:inputType="number"
+                android:layout_weight="0.75"
+                android:textAlignment="center"
+                android:text="2000"
+                />
+
+            <Spinner
+                android:id="@+id/toCUR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.125"
+                android:textAlignment="center"
+                android:entries="@array/currencies"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="8dp"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:text="Result"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:background="@drawable/converter_shape">
+
+            <TextView
+                android:id="@+id/resultCUR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="4dp"
+                android:textSize="22sp"
+                android:textStyle="bold"
                 android:text="2000"
                 />
 
@@ -46,22 +138,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_margin="8dp"
-            android:background="@drawable/converter_shape">
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center">
 
-            <Spinner
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="80dp"
-                android:entries="@array/currencies"
+                android:textSize="14sp"
+                android:text="According to "
                 />
 
-            <EditText
+            <TextView
+                android:id="@+id/dateCUR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="200dp"
-                android:text="2000"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="25.05.3266"
                 />
 
         </LinearLayout>

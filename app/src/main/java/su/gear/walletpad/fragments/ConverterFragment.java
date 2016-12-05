@@ -9,6 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import su.gear.walletpad.R;
 import su.gear.walletpad.converter.ConverterResult;
@@ -34,8 +38,94 @@ public class ConverterFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private Spinner  from, to;
+    private TextView result, date;
+    private EditText amount;
+
+    private String fromCur, toCur;
+    private String amountCur;
+    private String resultCur;
+
     public ConverterFragment() {
         // Required empty public constructor
+
+        from = (Spinner) getActivity ().findViewById (R.id.fromCUR);
+        to   = (Spinner) getActivity ().findViewById (R.id.toCUR);
+
+        result = (TextView) getActivity ().findViewById (R.id.resultCUR);
+        date   = (TextView) getActivity ().findViewById (R.id.dateCUR);
+        amount = (EditText) getActivity ().findViewById (R.id.amountCUR);
+
+        fromCur = "RUB";
+        toCur   = "RUB";
+
+        from.setOnItemSelectedListener (new AdapterView.OnItemSelectedListener () {
+            public void onItemSelected (AdapterView <?> parent,
+                                        View itemSelected,
+                                        int selectedItemPosition,
+                                        long selectedId) {
+                fromCur = getResources ()
+                            .getStringArray (R.array.currencies)
+                                [selectedItemPosition];
+                noticeChanges();
+            }
+
+            public void onNothingSelected (AdapterView <?> parent) {
+
+            }
+        });
+
+        to.setOnItemSelectedListener (new AdapterView.OnItemSelectedListener () {
+            public void onItemSelected (AdapterView <?> parent,
+                                        View itemSelected,
+                                        int selectedItemPosition,
+                                        long selectedId) {
+                toCur = getResources ()
+                        .getStringArray (R.array.currencies)
+                            [selectedItemPosition];
+                noticeChanges();
+            }
+
+            public void onNothingSelected (AdapterView <?> parent) {
+
+            }
+        });
+    }
+
+    private void noticeChanges () {
+        if (fromCur != null
+                && toCur != null
+                && amountCur != null) {
+            final ConverterFragment frag = this;
+
+            Bundle args = new Bundle ();
+            args.putString ("from", fromCur);
+            args.putString ("to", toCur);
+            args.putDouble ("amount", Double.parseDouble (amountCur));
+
+            getActivity()
+                    .getSupportLoaderManager()
+                    .restartLoader (0, args, new LoaderManager.LoaderCallbacks <ConverterResult> () {
+
+                public Loader <ConverterResult> onCreateLoader (int id, Bundle args) {
+                    String from   = args.getString ("from");
+                    String to     = args.getString ("to");
+                    double amount = args.getDouble ("amount");
+
+                    Log.d ("ConverterFragment", "onCreateLoader");
+                    return new CurrencyConverter (frag.getContext (), from, to, amount);
+                }
+
+                public void onLoadFinished (Loader <ConverterResult> loader, ConverterResult result) {
+                    Log.d ("ConverterFragment", result.getResult () + "");
+                }
+
+                public void onLoaderReset(Loader <ConverterResult> loader) {
+                    // Do nothing
+                }
+
+            });
+        }
     }
 
     /**
