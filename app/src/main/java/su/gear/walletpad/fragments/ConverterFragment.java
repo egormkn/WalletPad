@@ -78,35 +78,6 @@ public class ConverterFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        Log.d ("Converter", "Me eme em");
-        final ConverterFragment frag = this;
-
-        Bundle args = new Bundle ();
-        args.putString ("from", "RUB");
-        args.putString ("to", "USD");
-        args.putInt ("amount", 100);
-
-        getActivity().getSupportLoaderManager().restartLoader (0, args, new LoaderManager.LoaderCallbacks <ConverterResult> () {
-
-            public Loader <ConverterResult> onCreateLoader (int id, Bundle args) {
-                String from   = args.getString ("from");
-                String to     = args.getString ("to");
-                int    amount = args.getInt ("amount");
-
-                Log.d ("ConverterFragment", "onCreateLoader");
-                return new CurrencyConverter (frag.getContext (), from, to, amount);
-            }
-
-            public void onLoadFinished (Loader <ConverterResult> loader, ConverterResult result) {
-                Log.d ("ConverterFragment", result.getResult () + "");
-            }
-
-            public void onLoaderReset(Loader <ConverterResult> loader) {
-                // Do nothing
-            }
-
-        });
     }
 
     @Override
