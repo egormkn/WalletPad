@@ -90,7 +90,7 @@ public class CurrencyConverter extends AsyncTaskLoader<ConverterResult> {
                         result.setStatus (ConverterResult.Status.PARSE_FAILED);
                     }
                 } else {
-                    Log.e (TAG, "Currency `" + toCode + "` ratio was not found");
+                    Log.e (TAG, "Currency `" + fromCode + "` ratio was not found");
                     result.setStatus (ConverterResult.Status.PARSE_FAILED);
                 }
             } else {
@@ -129,16 +129,24 @@ public class CurrencyConverter extends AsyncTaskLoader<ConverterResult> {
         while (eventType != XmlPullParser.END_DOCUMENT) {
             if (eventType == XmlPullParser.START_TAG) {
                 String name = parser.getName ();
-                Log.d (TAG, "Now node: " + name);
+                //Log.d (TAG, "Now node: " + name);
 
                 if (name.equals ("Cube")) {
+                    if (parser.getAttributeCount () == 1) {
+                        String attrName = parser.getAttributeName (0);
+
+                        if (attrName.equals ("time")) {
+                            result.setDate (parser.getAttributeValue (0));
+                        }
+                    }
+
                     if (parser.getAttributeCount () == 2) {
                         String currency = parser.getAttributeValue (0);
-                        String ration  = parser.getAttributeValue (1);
-                        Double value   = Double.parseDouble (ration);
+                        String ration   = parser.getAttributeValue (1);
+                        Double value    = Double.parseDouble (ration);
 
-                        Log.d (TAG, "It's a currency node: "
-                                        + currency + " - " + ration);
+                        //Log.d (TAG, "It's a currency node: "
+                        //                + currency + " - " + ration);
                         currencies.put (currency, value);
                     }
                 }

@@ -33,7 +33,7 @@
                 android:layout_gravity="start"
                 android:textAlignment="center"
                 android:textSize="14sp"
-                android:text="From"/>
+                android:text=""/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
                 android:layout_gravity="end"
                 android:textAlignment="center"
                 android:textSize="14sp"
-                android:text="To  "/>
+                android:text=""/>
 
         </LinearLayout>
 

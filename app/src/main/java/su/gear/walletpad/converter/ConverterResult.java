@@ -15,6 +15,7 @@ public class ConverterResult {
 
     private Status status;
     private double result;
+    private String date;
 
     public ConverterResult () {
         this.status = Status.NOT_STARTED;
@@ -29,12 +30,18 @@ public class ConverterResult {
         this.result = value;
     }
 
+    public void setDate (String date) { this.date = date; }
+
     public double getResult () {
         if (this.status != Status.READY) {
             return -1D;
         }
 
         return result;
+    }
+
+    public String getDate () {
+        return date;
     }
 
 }
