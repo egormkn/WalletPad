@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="su.gear.walletpad">
-
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <!--<uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />-->
 
     <application
         android:name=".WalletPadApplication"
@@ -17,7 +13,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,8 +23,9 @@
         </activity>
 
         <activity
-            android:name=".AboutActivity"
-            android:parentActivityName=".MainActivity">
+            android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity"
+            tools:ignore="UnusedAttribute">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -36,8 +34,9 @@
         </activity>
 
         <activity
-            android:name=".SettingsActivity"
-            android:parentActivityName=".MainActivity">
+            android:name=".AboutActivity"
+            android:parentActivityName=".MainActivity"
+            tools:ignore="UnusedAttribute">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data

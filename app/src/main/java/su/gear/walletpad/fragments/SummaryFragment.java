@@ -8,12 +8,22 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DatabaseReference;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import su.gear.walletpad.R;
-import su.gear.walletpad.adapters.TabPagerAdapter;
+import su.gear.walletpad.adapters.ChildrenPagesAdapter;
+import su.gear.walletpad.adapters.OperationsAdapter;
+import su.gear.walletpad.model.Operation;
+import su.gear.walletpad.model.OperationsListItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +34,12 @@ import su.gear.walletpad.adapters.TabPagerAdapter;
  * create an instance of this fragment.
  */
 public class SummaryFragment extends Fragment {
+
+    private DatabaseReference mFirebaseDatabaseReference;
+    /*private FirebaseRecyclerAdapter<FriendlyMessage, MessageViewHolder>
+            mFirebaseAdapter;*/
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,6 +50,8 @@ public class SummaryFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private List<OperationsListItem> operations;
 
     public SummaryFragment() {
         // Required empty public constructor
@@ -64,17 +82,23 @@ public class SummaryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        operations = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++) {
+            operations.add(new Operation(i, Operation.Type.INCOME, "RUB", 100.0, "Описание", "Category", null, 100));
+        }
+        setHasOptionsMenu(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_summary, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,13 +108,15 @@ public class SummaryFragment extends Fragment {
             }
         });
 
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tablayout);
-
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new TabPagerAdapter(getActivity()));
+        ChildrenPagesAdapter pagerAdapter = new ChildrenPagesAdapter(viewPager);
+        viewPager.setAdapter(pagerAdapter);
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
 
-        //viewPager.setAdapter(new TabPagerAdapter(fragmentView.getContext()));
+        RecyclerView recyclerView = (RecyclerView) pagerAdapter.findViewById(R.id.tab_summary_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(new OperationsAdapter(getActivity(), operations));
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -131,5 +157,70 @@ public class SummaryFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    
+
+
+
+
+
+
+
+
+
+
+    /*
+        // This event fires 1st, before creation of fragment or any views
+    // The onAttach method is called when the Fragment instance is associated with an Activity.
+    // This does not mean the Activity is fully initialized.
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity){
+            this.listener = (FragmentActivity) context;
+        }
+    }
+
+    // This event fires 2nd, before views are created for the fragment
+    // The onCreate method is called when the Fragment instance is being created, or re-created.
+    // Use onCreate for any standard setup that does not require the activity to be fully created
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ArrayList<Thing> things = new ArrayList<Thing>();
+        adapter = new ThingsAdapter(getActivity(), things);
+    }
+
+    // The onCreateView method is called when Fragment should create its View object hierarchy,
+    // either dynamically or via XML layout inflation.
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_some, parent, false);
+    }
+
+    // This event is triggered soon after onCreateView().
+    // onViewCreated() is only called if the view returned from onCreateView() is non-null.
+    // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        ListView lv = (ListView) view.findViewById(R.id.lvSome);
+        lv.setAdapter(adapter);
+    }
+
+    // This method is called when the fragment is no longer connected to the Activity
+    // Any references saved in onAttach should be nulled out here to prevent memory leaks.
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.listener = null;
+    }
+
+    // This method is called after the parent Activity's onCreate() method has completed.
+    // Accessing the view hierarchy of the parent activity must be done in the onActivityCreated.
+    // At this point, it is safe to search for activity View objects by their ID, for example.
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    */
+
 }

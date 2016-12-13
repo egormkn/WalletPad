@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <FrameLayout
+        android:id="@+id/operation_category"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/ic_circle"
+        android:backgroundTint="@color/colorAccent">
+
+        <ImageView
+            android:id="@+id/operation_category_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:tint="@color/white"
+            app:srcCompat="@drawable/ic_summary" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/operation_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/operation_category"
+        android:layout_toLeftOf="@+id/operation_sum"
+        android:layout_toRightOf="@+id/operation_category"
+        android:layout_toStartOf="@+id/operation_sum"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:text="Покупка в Юлмарт" />
+
+    <TextView
+        android:id="@+id/operation_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/operation_title"
+        android:layout_marginTop="4dp"
+        android:layout_toEndOf="@+id/operation_category"
+        android:layout_toLeftOf="@+id/operation_sum"
+        android:layout_toRightOf="@+id/operation_category"
+        android:layout_toStartOf="@+id/operation_sum"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="16sp"
+        tools:text="Техника, Для дома" />
+
+    <TextView
+        android:id="@+id/operation_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/expense"
+        android:textSize="22sp"
+        tools:text="-30$" />
+
+</RelativeLayout>
