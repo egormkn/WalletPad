@@ -1,22 +1,27 @@
 package su.gear.walletpad;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +37,6 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.ActionCodeResult;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,8 +55,8 @@ import su.gear.walletpad.fragments.ConverterFragment;
 import su.gear.walletpad.fragments.ExportFragment;
 import su.gear.walletpad.fragments.ImportFragment;
 import su.gear.walletpad.fragments.OperationsFragment;
-import su.gear.walletpad.fragments.SummaryFragment;
 import su.gear.walletpad.fragments.StatisticsFragment;
+import su.gear.walletpad.fragments.SummaryFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -62,23 +66,14 @@ public class MainActivity extends AppCompatActivity
     private static final int RC_SIGN_IN = 9001;
 
     private DrawerLayout drawer;
+    private ActionBarDrawerToggle drawerToggle;
     private Button signInButton;
     private RelativeLayout userInfo;
-
-    private SummaryFragment fragment_summary;
-    private OperationsFragment fragment_operations;
-    private BudgetFragment fragment_budget;
-    private StatisticsFragment fragment_statistics;
-
-    private ImportFragment fragment_import;
-    private BanksFragment fragment_banks;
-    private ConverterFragment fragment_converter;
-    private ExportFragment fragment_export;
+    private RelativeLayout userLoader;
 
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private RelativeLayout userLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,27 +84,26 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(drawerToggle);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fragment_summary = new SummaryFragment();
-        fragment_operations = new OperationsFragment();
-        fragment_budget = new BudgetFragment();
-        fragment_statistics = new StatisticsFragment();
-
-        fragment_import = new ImportFragment();
-        fragment_banks = new BanksFragment();
-        fragment_converter = new ConverterFragment();
-        fragment_export = new ExportFragment();
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment_summary);
-        transaction.commit();
+        View travelModeView = MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.nav_travel));
+        final AppCompatCheckBox travelCheckbox = (AppCompatCheckBox) travelModeView.findViewById(R.id.nav_checkbox);
+        travelModeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                travelCheckbox.performClick();
+            }
+        });
+        travelCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Toast.makeText(MainActivity.this, "Travel mode: " + b, Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -171,6 +165,25 @@ public class MainActivity extends AppCompatActivity
                 System.err.println("Listener was cancelled");
             }
         });
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, new SummaryFragment()).commit();
+    }
+
+    private boolean isDrawerLocked() {
+        return drawer.getDrawerLockMode(GravityCompat.START) == DrawerLayout.LOCK_MODE_LOCKED_OPEN;
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -302,75 +315,90 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_SHORT);
-            toast.show();
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
+        }
+        switch(item.getItemId()) {
+            case R.id.action_settings:
+                Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_share:
+                Toast.makeText(getApplicationContext(), "Share", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_update:
+                Toast.makeText(getApplicationContext(), "Update", Toast.LENGTH_SHORT).show();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        Fragment fragment = null;
+        Class fragmentClass;
+        Intent intent;
 
-        Fragment newFragment = null;
-
-        if (id == R.id.nav_summary) {
-            newFragment = fragment_summary;
-        } else if (id == R.id.nav_operations) {
-            newFragment = fragment_operations;
-        } else if (id == R.id.nav_budget) {
-            newFragment = fragment_budget;
-        } else if (id == R.id.nav_statistics) {
-            newFragment = fragment_statistics;
-        } else if (id == R.id.nav_import) {
-            newFragment = fragment_import;
-        } else if (id == R.id.nav_banks) {
-            newFragment = fragment_banks;
-        } else if (id == R.id.nav_converter) {
-            newFragment = fragment_converter;
-        } else if (id == R.id.nav_export) {
-            newFragment = fragment_export;
-        } else if (id == R.id.nav_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            /*EditText editText = (EditText) findViewById(R.id.edit_message);
-            String message = editText.getText().toString();
-            intent.putExtra(EXTRA_MESSAGE, message);*/
-            startActivity(intent);
-            drawer.closeDrawer(GravityCompat.START);
-            return true;
-        } else if (id == R.id.nav_about) {
-            Intent intent = new Intent(this, AboutActivity.class);
-            /*EditText editText = (EditText) findViewById(R.id.edit_message);
-            String message = editText.getText().toString();
-            intent.putExtra(EXTRA_MESSAGE, message);*/
-            startActivity(intent);
-            drawer.closeDrawer(GravityCompat.START);
-            return true;
-        } else {
-            newFragment = fragment_summary;
+        switch(item.getItemId()) {
+            case R.id.nav_summary:
+                fragmentClass = SummaryFragment.class;
+                break;
+            case R.id.nav_operations:
+                fragmentClass = OperationsFragment.class;
+                break;
+            case R.id.nav_budget:
+                fragmentClass = BudgetFragment.class;
+                break;
+            case R.id.nav_statistics:
+                fragmentClass = StatisticsFragment.class;
+                break;
+            case R.id.nav_import:
+                fragmentClass = ImportFragment.class;
+                break;
+            case R.id.nav_banks:
+                fragmentClass = BanksFragment.class;
+                break;
+            case R.id.nav_converter:
+                fragmentClass = ConverterFragment.class;
+                break;
+            case R.id.nav_export:
+                fragmentClass = ExportFragment.class;
+                break;
+            case R.id.nav_travel:
+                CheckBox checkbox = (CheckBox) MenuItemCompat.getActionView(item).findViewById(R.id.nav_checkbox);
+                checkbox.performClick();
+                return true;
+            case R.id.nav_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            case R.id.nav_about:
+                intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            default:
+                fragmentClass = SummaryFragment.class;
         }
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, newFragment);
-        transaction.commit();
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
+        item.setChecked(true);
+        setTitle(item.getTitle());
 
         drawer.closeDrawer(GravityCompat.START);
         return true;

@@ -48,7 +48,11 @@ public class OperationsAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final OperationsListItem item = operations.get(position);
         if (holder instanceof OperationViewHolder) {
+            Operation operation = (Operation) item;
             final OperationViewHolder operationHolder = (OperationViewHolder) holder;
+            operationHolder.titleView.setText(operation.getDescription());
+            operationHolder.sumView.setText(String.valueOf(operation.getSum()));
+            //operationHolder.tagsView.setText(operation.getTags().get(0));
             /*if (!movie.isError()) {
                 progressHolder.progressBar.setVisibility(View.VISIBLE);
                 progressHolder.progressBar.setIndeterminate(true);
