@@ -2,30 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:padding="8dp">
 
-    <FrameLayout
+    <su.gear.walletpad.views.IconView
+        android:background="#CCC"
         android:id="@+id/operation_category"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:background="@drawable/ic_circle"
-        android:backgroundTint="@color/colorAccent">
-
-        <ImageView
-            android:id="@+id/operation_category_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:tint="@color/white"
-            app:srcCompat="@drawable/ic_summary" />
-
-    </FrameLayout>
+        app:shape_color="@color/colorAccent"
+        app:icon_color="@color/white"
+        app:icon_height="24dp"
+        app:icon_width="24dp"
+        app:icon="@drawable/ic_summary"
+        app:shape="circle" />
 
     <TextView
         android:id="@+id/operation_title"
@@ -39,7 +32,7 @@
         android:layout_toStartOf="@+id/operation_sum"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         tools:text="Покупка в Юлмарт" />
 
@@ -70,7 +63,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="16dp"
         android:textColor="@color/expense"
-        android:textSize="22sp"
+        android:textSize="18sp"
         tools:text="-30$" />
 
 </RelativeLayout>

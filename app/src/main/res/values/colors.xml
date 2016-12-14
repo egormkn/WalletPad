@@ -15,5 +15,8 @@
     <color name="imageBackground">#CCCCCC</color>
     <color name="defaultAvatar">#888888</color>
     <color name="white">#FFFFFF</color>
-    <color name="expense">#FF0000</color>
+
+    <color name="income">#4CAF50</color>
+    <color name="expense">#F44336</color>
+    <color name="transfer">#03A9F4</color>
 </resources>

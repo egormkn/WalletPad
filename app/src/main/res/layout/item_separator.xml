@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/separator_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/recyclerview_item_margin"
+        android:layout_marginRight="@dimen/recyclerview_item_margin"
+        android:layout_marginTop="@dimen/recyclerview_item_margin"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        tools:targetApi="ice_cream_sandwich"
+        tools:text="30 ноября 2016" />
+
+    <View
+        style="@style/Divider"
+        android:layout_marginLeft="@dimen/recyclerview_item_margin"
+        android:layout_marginRight="@dimen/recyclerview_item_margin"
+        android:background="@color/colorAccent" />
+
+</LinearLayout>

@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -13,11 +12,14 @@ import java.util.List;
 import su.gear.walletpad.R;
 import su.gear.walletpad.model.Operation;
 import su.gear.walletpad.model.OperationsListItem;
+import su.gear.walletpad.model.Separator;
+import su.gear.walletpad.utils.IOUtils;
 
 public class OperationsAdapter extends RecyclerView.Adapter {
 
     private final int ITEM_OPERATION = R.layout.item_operation;
-    private final int ITEM_DATE = R.layout.item_date;
+    private final int ITEM_DATE = R.layout.item_separator;
+    private final int ITEM_MORE = R.layout.item_separator;
 
     private final LayoutInflater layoutInflater;
     private final List<OperationsListItem> operations;
@@ -36,23 +38,25 @@ public class OperationsAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == ITEM_OPERATION) {
-            return OperationViewHolder.newInstance(layoutInflater, parent);
-        } else if (viewType == ITEM_DATE) {
-            return DateViewHolder.newInstance(layoutInflater, parent);
+        switch (viewType) {
+            case ITEM_OPERATION:
+                return OperationViewHolder.newInstance(layoutInflater, parent);
+            case ITEM_DATE:
+                return DateViewHolder.newInstance(layoutInflater, parent);
+            default:
+                throw new IllegalArgumentException("Unknown View type: " + viewType);
         }
-        throw new IllegalArgumentException("Unknown View type: " + viewType);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        final OperationsListItem item = operations.get(position);
+        OperationsListItem item = operations.get(position);
         if (holder instanceof OperationViewHolder) {
             Operation operation = (Operation) item;
-            final OperationViewHolder operationHolder = (OperationViewHolder) holder;
+            OperationViewHolder operationHolder = (OperationViewHolder) holder;
             operationHolder.titleView.setText(operation.getDescription());
             operationHolder.sumView.setText(String.valueOf(operation.getSum()));
-            //operationHolder.tagsView.setText(operation.getTags().get(0));
+            operationHolder.tagsView.setText(IOUtils.join(operation.getTags(), ", "));
             /*if (!movie.isError()) {
                 progressHolder.progressBar.setVisibility(View.VISIBLE);
                 progressHolder.progressBar.setIndeterminate(true);
@@ -72,6 +76,8 @@ public class OperationsAdapter extends RecyclerView.Adapter {
             }*/
         } else if (holder instanceof DateViewHolder) {
             final DateViewHolder movieHolder = (DateViewHolder) holder;
+            Separator separator = (Separator) item;
+            movieHolder.dateText.setText(separator.getText());
             /*movieHolder.imageView.setImageURI(movie.posterPath);
             movieHolder.titleView.setText(movie.localizedTitle);
             movieHolder.originalTitleView.setText(movie.originalTitle);
@@ -87,12 +93,12 @@ public class OperationsAdapter extends RecyclerView.Adapter {
 
     private static class OperationViewHolder extends RecyclerView.ViewHolder {
 
-        final ImageView categoryIconView;
+        //final ImageView categoryIconView;
         final TextView titleView, tagsView, sumView;
 
         private OperationViewHolder(View itemView) {
             super(itemView);
-            categoryIconView = (ImageView) itemView.findViewById(R.id.operation_category_icon);
+            //categoryIconView = (ImageView) itemView.findViewById(R.id.operation_category_icon);
             titleView = (TextView) itemView.findViewById(R.id.operation_title);
             tagsView = (TextView) itemView.findViewById(R.id.operation_tags);
             sumView = (TextView) itemView.findViewById(R.id.operation_sum);
@@ -110,11 +116,11 @@ public class OperationsAdapter extends RecyclerView.Adapter {
 
         private DateViewHolder(View itemView) {
             super(itemView);
-            dateText = (TextView) itemView.findViewById(R.id.date_text);
+            dateText = (TextView) itemView.findViewById(R.id.separator_text);
         }
 
         static DateViewHolder newInstance(LayoutInflater layoutInflater, ViewGroup parent) {
-            final View view = layoutInflater.inflate(R.layout.item_date, parent, false);
+            final View view = layoutInflater.inflate(R.layout.item_separator, parent, false);
             return new DateViewHolder(view);
         }
     }
