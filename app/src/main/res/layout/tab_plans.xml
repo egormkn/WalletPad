@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,6 +11,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="TEST3 TEST3 TEST3 TEST2 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 "
-        android:textSize="60sp" />
+        android:text="Text"
+        android:textSize="20sp" />
+
 </android.support.v4.widget.NestedScrollView>
