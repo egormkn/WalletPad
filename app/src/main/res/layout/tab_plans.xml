@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:contentDescription="Plans"
+    android:id="@+id/tab_plans"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="TEST3 TEST3 TEST3 TEST2 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 TEST3 "
-        android:textSize="60sp" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="No data available"
+            android:visibility="gone" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/tab_plans_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:scrollbars="vertical" />
+
+    </FrameLayout>
+
 </android.support.v4.widget.NestedScrollView>

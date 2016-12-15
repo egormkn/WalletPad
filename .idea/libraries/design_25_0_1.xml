@@ -9,8 +9,8 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://C:/Programs/AndroidSDK/extras/android/m2repository/com/android/support/design/25.0.1/design-25.0.1-sources.jar!/" />
       <root url="jar://C:/AndroidSDK/extras/android/m2repository/com/android/support/design/25.0.1/design-25.0.1-sources.jar!/" />
+      <root url="jar://C:/Programs/AndroidSDK/extras/android/m2repository/com/android/support/design/25.0.1/design-25.0.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

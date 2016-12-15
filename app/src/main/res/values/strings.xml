@@ -29,7 +29,10 @@
 
     <string name="please_wait">Please, wait…</string>
 
+    <string name="default_currency">RUB</string>
+
     <string-array name="currencies">
+        <item>RUB</item>
         <item>USD</item>
         <item>JPY</item>
         <item>BGN</item>
@@ -43,7 +46,6 @@
         <item>CHF</item>
         <item>NOK</item>
         <item>HRK</item>
-        <item>RUB</item>
         <item>TRY</item>
         <item>AUD</item>
         <item>BRL</item>
