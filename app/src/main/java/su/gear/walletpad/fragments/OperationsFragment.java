@@ -1,14 +1,24 @@
 package su.gear.walletpad.fragments;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import su.gear.walletpad.R;
+import su.gear.walletpad.adapters.OperationsAdapter;
+import su.gear.walletpad.model.Operation;
+import su.gear.walletpad.model.OperationsListItem;
+import su.gear.walletpad.model.Separator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,6 +29,12 @@ import su.gear.walletpad.R;
  * create an instance of this fragment.
  */
 public class OperationsFragment extends Fragment {
+
+
+    private List<OperationsListItem> operations;
+
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -59,6 +75,15 @@ public class OperationsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        operations = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++) {
+            if (i % 5 == 0) {
+                operations.add(new Separator("30 ноября 2016"));
+            }
+            operations.add(new Operation(i, Operation.Type.INCOME, "RUB", 100.0, "Описание", "Category", new ArrayList<>(Arrays.asList("Buenos Aires", "Córdoba", "La Plata")), 100));
+        }
     }
 
     @Override
@@ -66,6 +91,14 @@ public class OperationsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_operations, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_operations_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(new OperationsAdapter(getActivity(), operations));
     }
 
     // TODO: Rename method, update argument and hook method into UI event

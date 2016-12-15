@@ -1,6 +1,8 @@
 package su.gear.walletpad.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import su.gear.walletpad.model.Operation;
 import su.gear.walletpad.model.OperationsListItem;
 import su.gear.walletpad.model.Separator;
 import su.gear.walletpad.utils.IOUtils;
+import su.gear.walletpad.views.IconView;
 
 public class OperationsAdapter extends RecyclerView.Adapter {
 
@@ -57,6 +60,13 @@ public class OperationsAdapter extends RecyclerView.Adapter {
             operationHolder.titleView.setText(operation.getDescription());
             operationHolder.sumView.setText(String.valueOf(operation.getSum()));
             operationHolder.tagsView.setText(IOUtils.join(operation.getTags(), ", "));
+            if (position % 4 == 0) {
+                operationHolder.categoryIconView.setIconColor(Color.RED);
+                operationHolder.categoryIconView.setShapeColor(Color.GREEN);
+            } else {
+                operationHolder.categoryIconView.setIconColor(ResourcesCompat.getColor(context.getResources(), R.color.white, null));
+                operationHolder.categoryIconView.setShapeColor(ResourcesCompat.getColor(context.getResources(), R.color.colorAccent, null));
+            }
             /*if (!movie.isError()) {
                 progressHolder.progressBar.setVisibility(View.VISIBLE);
                 progressHolder.progressBar.setIndeterminate(true);
@@ -93,12 +103,12 @@ public class OperationsAdapter extends RecyclerView.Adapter {
 
     private static class OperationViewHolder extends RecyclerView.ViewHolder {
 
-        //final ImageView categoryIconView;
+        final IconView categoryIconView;
         final TextView titleView, tagsView, sumView;
 
         private OperationViewHolder(View itemView) {
             super(itemView);
-            //categoryIconView = (ImageView) itemView.findViewById(R.id.operation_category_icon);
+            categoryIconView = (IconView) itemView.findViewById(R.id.operation_category);
             titleView = (TextView) itemView.findViewById(R.id.operation_title);
             tagsView = (TextView) itemView.findViewById(R.id.operation_tags);
             sumView = (TextView) itemView.findViewById(R.id.operation_sum);

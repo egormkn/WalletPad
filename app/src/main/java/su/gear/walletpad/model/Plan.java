@@ -2,10 +2,6 @@ package su.gear.walletpad.model;
 
 import su.gear.walletpad.R;
 
-/**
- * Created by Андрей on 15.12.2016.
- */
-
 public class Plan implements PlansListItem {
 
     public enum Type {
@@ -92,5 +88,4 @@ public class Plan implements PlansListItem {
 
     public String title       () { return title; }
     public Type   type        () { return type; }
-
 }
