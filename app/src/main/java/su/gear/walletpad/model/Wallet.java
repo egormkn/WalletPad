@@ -18,7 +18,7 @@ public class Wallet implements WalletsListItem {
 
     private final Type type;
 
-    public Wallet(double amount, long id, String title, Type type) {
+    public Wallet (double amount, long id, String title, Type type) {
         this.amount = amount;
         this.id = id;
         this.title = title;
