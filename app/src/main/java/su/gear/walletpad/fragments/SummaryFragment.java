@@ -25,6 +25,7 @@ import su.gear.walletpad.NewOperationActivity;
 import su.gear.walletpad.R;
 import su.gear.walletpad.adapters.ChildrenPagesAdapter;
 import su.gear.walletpad.adapters.OperationsAdapter;
+import su.gear.walletpad.adapters.PlansAdapter;
 import su.gear.walletpad.model.Operation;
 import su.gear.walletpad.model.OperationsListItem;
 import su.gear.walletpad.model.Separator;
@@ -117,6 +118,10 @@ public class SummaryFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) pagerAdapter.findViewById(R.id.tab_summary_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new OperationsAdapter(getActivity(), operations));
+
+        RecyclerView recyclerView2 = (RecyclerView) pagerAdapter.findViewById(R.id.tab_plans_recycler);
+        recyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView2.setAdapter(new PlansAdapter (getActivity (), null));
     }
 
 }

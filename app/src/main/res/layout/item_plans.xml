@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <su.gear.walletpad.views.IconView
+        android:id="@+id/plan_category"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:shape="circle"
+        app:icon_width="24dp"
+        app:icon_height="24dp"
+        app:icon="@drawable/ic_summary"
+        />
+
+    <TextView
+        android:id="@+id/plan_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/plan_category"
+        android:layout_toLeftOf="@+id/plan_sum"
+        android:layout_toRightOf="@+id/plan_category"
+        android:layout_toStartOf="@+id/plan_sum"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Text for test"
+        />
+
+    <TextView
+        android:id="@+id/plan_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/plan_title"
+        android:layout_marginTop="4dp"
+        android:layout_toEndOf="@+id/plan_category"
+        android:layout_toLeftOf="@+id/plan_sum"
+        android:layout_toRightOf="@+id/plan_category"
+        android:layout_toStartOf="@+id/plan_sum"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="16sp"
+        tools:text="Техника, Для дома" />
+
+    <TextView
+        android:id="@+id/plan_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/expense"
+        android:textSize="18sp"
+        tools:text="-30$" />
+
+    <Button
+        android:id="@+id/plan_apply"
+        android:layout_width="wrap_content"
+        android:minWidth="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="0dp"
+        android:layout_below="@+id/plan_sum"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="4dp"
+        android:layout_toEndOf="@+id/plan_title"
+        android:layout_toRightOf="@+id/plan_title"
+        android:padding="6dp"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/button_small"
+        android:text="Pay" />
+
+</RelativeLayout>
