@@ -5,9 +5,9 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.support.v7.content.res.AppCompatResources;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -15,22 +15,24 @@ import su.gear.walletpad.R;
 
 public class IconView extends View {
 
+    private static final String TAG = IconView.class.getSimpleName();
+
     private static final int CIRCLE = 0;
     private static final int SQUARE = 1;
 
-    int shape = CIRCLE;
-    int shapeColor = Color.GRAY;
-    int icon = 0;
-    int iconColor = Color.WHITE;
-    float iconWidth = 0.0f;
-    float iconHeight = 0.0f;
-
-
-
-    private Paint paintShape;
+    private int shape = CIRCLE;
+    private int iconColor = Color.WHITE;
+    private int shapeColor = Color.GRAY;
+    private int shapeWidth = 0;
+    private int shapeHeight = 0;
+    private Paint paintShape = null;
+    private Drawable icon = null;
+    private int iconWidth = 0;
+    private int iconHeight = 0;
 
     public IconView(Context context) {
         super(context);
+        setupAttributes(null, 0, 0);
     }
 
     public IconView(Context context, AttributeSet attrs) {
@@ -44,47 +46,82 @@ public class IconView extends View {
     }
 
     private void setupAttributes(AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        paintShape = new Paint();
+        paintShape.setAntiAlias(true);
+        paintShape.setStyle(Paint.Style.FILL);
+        if (attrs == null) {
+            return;
+        }
         TypedArray a = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.IconView, defStyleAttr, defStyleRes);
         try {
             shape = a.getInt(R.styleable.IconView_shape, CIRCLE);
             shapeColor = a.getColor(R.styleable.IconView_shape_color, Color.GRAY);
-            icon = a.getResourceId(R.styleable.IconView_icon, 0);
+            icon = AppCompatResources.getDrawable(getContext(), a.getResourceId(R.styleable.IconView_icon, R.drawable.ic_default));
+            if (icon != null) {
+                icon = icon.mutate();
+            }
             iconColor = a.getColor(R.styleable.IconView_icon_color, Color.WHITE);
-            iconWidth = a.getDimension(R.styleable.IconView_icon_width, 0);
-            iconHeight = a.getDimension(R.styleable.IconView_icon_height, 0);
+            iconWidth = (int) a.getDimension(R.styleable.IconView_icon_width, 16);
+            iconHeight = (int) a.getDimension(R.styleable.IconView_icon_height, 16);
         } finally {
             a.recycle();
         }
 
-        setupPaint();
+        paintShape.setColor(shapeColor);
+        if (icon != null) {
+            icon.setColorFilter(iconColor, PorterDuff.Mode.SRC_ATOP);
+        }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        int left = getPaddingLeft();
+        int top = getPaddingTop();
+        int right = getWidth() - getPaddingRight();
+        int bottom = getHeight() - getPaddingBottom();
+        shapeWidth = getWidth();
+        shapeHeight = getHeight();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        int shapeWidth = getMeasuredWidth();
-        int shapeHeight = getMeasuredHeight();
         switch (shape) {
             case CIRCLE:
-                canvas.drawCircle(shapeWidth / 2, shapeHeight / 2, shapeWidth / 2, paintShape);
+                canvas.drawCircle(shapeWidth / 2, shapeHeight / 2, Math.min(shapeWidth / 2, shapeHeight / 2), paintShape);
                 break;
             case SQUARE:
                 canvas.drawRect(0, 0, shapeWidth, shapeHeight, paintShape);
                 break;
-            default:
-                throw new IllegalArgumentException("Unknown shape");
         }
-        Drawable myImage = getContext().getResources().getDrawable(icon, getContext().getTheme());
-        myImage.draw(canvas);
+        if (icon != null) {
+            icon.setBounds((shapeWidth - iconWidth) / 2, (shapeHeight - iconHeight) / 2, (shapeWidth - iconWidth) / 2 + iconWidth, (shapeHeight - iconHeight) / 2 + iconHeight);
+            icon.draw(canvas);
+        }
     }
 
-    private void setupPaint() {
-        paintShape = new Paint();
-        paintShape.setAntiAlias(true);
-        paintShape.setStyle(Paint.Style.FILL);
+    public int getShapeColor() {
+        return shapeColor;
+    }
+
+    public void setShapeColor(int color) {
+        shapeColor = color;
         paintShape.setColor(shapeColor);
-        paintShape.setTextSize(30);
+        invalidate();
+        requestLayout();
+    }
+
+    public int getIconColor() {
+        return iconColor;
+    }
+
+    public void setIconColor(int color) {
+        iconColor = color;
+        if (icon != null) {
+            icon.setColorFilter(iconColor, PorterDuff.Mode.SRC_ATOP);
+        }
+        invalidate();
+        requestLayout();
     }
 }

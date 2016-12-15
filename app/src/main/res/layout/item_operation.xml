@@ -4,20 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:layout_marginTop="@dimen/recyclerview_item_spacing"
+    android:layout_marginBottom="@dimen/recyclerview_item_spacing"
+    android:layout_marginLeft="@dimen/recyclerview_item_margin"
+    android:layout_marginRight="@dimen/recyclerview_item_margin">
 
     <su.gear.walletpad.views.IconView
         android:background="#CCC"
         android:id="@+id/operation_category"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_width="@dimen/operation_iconview_size"
+        android:layout_height="@dimen/operation_iconview_size"
+        android:layout_marginEnd="@dimen/operation_icon_margin"
+        android:layout_marginRight="@dimen/operation_icon_margin"
         app:shape_color="@color/colorAccent"
         app:icon_color="@color/white"
-        app:icon_height="24dp"
-        app:icon_width="24dp"
-        app:icon="@drawable/ic_summary"
+        app:icon_height="@dimen/operation_icon_size"
+        app:icon_width="@dimen/operation_icon_size"
+        app:icon="@drawable/ic_default"
         app:shape="circle" />
 
     <TextView

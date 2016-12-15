@@ -65,6 +65,8 @@ public class SummaryFragment extends Fragment {
             if (i % 5 == 0) {
                 operations.add(new Separator("30 ноября 2016"));
             }
+
+
             operations.add(new Operation(i, Operation.Type.INCOME, "RUB", 100.0, "Описание", "Category", new ArrayList<>(Arrays.asList("Buenos Aires", "Córdoba", "La Plata")), 100));
         }
         //operations.add(new ShowMore());
@@ -77,22 +79,25 @@ public class SummaryFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
 
         final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 if (addMenuShown) {
                     addMenuShown = false;
                     //view.findViewById(R.id.fab).setForeground(ContextCompat.getDrawable(getActivity(), R.drawable.button_focused));
                 }
                 Intent intent = new Intent(getActivity(), NewOperationActivity.class);
                 startActivity(intent);
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                /*view.findViewById(R.id.appbarlayout).setAlpha(0.5f);
+                view.findViewById(R.id.viewpager).setAlpha(0.5f);*/
             }
         });
+
 
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
