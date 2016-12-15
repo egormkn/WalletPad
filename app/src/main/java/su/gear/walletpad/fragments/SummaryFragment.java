@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import su.gear.walletpad.NewOperationActivity;
 import su.gear.walletpad.R;
@@ -28,6 +29,8 @@ import su.gear.walletpad.adapters.OperationsAdapter;
 import su.gear.walletpad.adapters.PlansAdapter;
 import su.gear.walletpad.model.Operation;
 import su.gear.walletpad.model.OperationsListItem;
+import su.gear.walletpad.model.Plan;
+import su.gear.walletpad.model.PlansListItem;
 import su.gear.walletpad.model.Separator;
 
 public class SummaryFragment extends Fragment {
@@ -36,7 +39,8 @@ public class SummaryFragment extends Fragment {
     /*private FirebaseRecyclerAdapter<FriendlyMessage, MessageViewHolder>
             mFirebaseAdapter;*/
 
-    private List<OperationsListItem> operations;
+    private List <OperationsListItem> operations;
+    private List <PlansListItem>      plans;
     private boolean addMenuShown = false;
 
     private TextView totalSum;
@@ -68,6 +72,20 @@ public class SummaryFragment extends Fragment {
             }
             operations.add(new Operation(i, Operation.Type.INCOME, "RUB", 100.0, "Описание", "Category", new ArrayList<>(Arrays.asList("Buenos Aires", "Córdoba", "La Plata")), 100));
         }
+
+        plans = new ArrayList <> ();
+        Random r = new Random ();
+
+        for (int i = 0; i < 30; i ++) {
+            plans.add (new Plan (i,
+                                 0,
+                                 Plan.Type.GIFT,
+                                 3 + r.nextInt (30),
+                                 "USD",
+                                 "Buy gift",
+                                 "For my darling"));
+        }
+
         //operations.add(new ShowMore());
         setHasOptionsMenu(true);
     }
@@ -119,9 +137,9 @@ public class SummaryFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new OperationsAdapter(getActivity(), operations));
 
-        RecyclerView recyclerView2 = (RecyclerView) pagerAdapter.findViewById(R.id.tab_plans_recycler);
-        recyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView2.setAdapter(new PlansAdapter (getActivity (), null));
+        RecyclerView recyclerView2 = (RecyclerView) pagerAdapter.findViewById (R.id.tab_plans_recycler);
+        recyclerView2.setLayoutManager (new LinearLayoutManager (getActivity()));
+        recyclerView2.setAdapter(new PlansAdapter (getActivity (), plans));
     }
 
 }
