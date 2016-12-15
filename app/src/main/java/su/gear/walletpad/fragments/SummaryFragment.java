@@ -27,11 +27,14 @@ import su.gear.walletpad.R;
 import su.gear.walletpad.adapters.ChildrenPagesAdapter;
 import su.gear.walletpad.adapters.OperationsAdapter;
 import su.gear.walletpad.adapters.PlansAdapter;
+import su.gear.walletpad.adapters.WalletsAdapter;
 import su.gear.walletpad.model.Operation;
 import su.gear.walletpad.model.OperationsListItem;
 import su.gear.walletpad.model.Plan;
 import su.gear.walletpad.model.PlansListItem;
 import su.gear.walletpad.model.Separator;
+import su.gear.walletpad.model.Wallet;
+import su.gear.walletpad.model.WalletsListItem;
 
 public class SummaryFragment extends Fragment {
 
@@ -41,6 +44,7 @@ public class SummaryFragment extends Fragment {
 
     private List <OperationsListItem> operations;
     private List <PlansListItem>      plans;
+    private List <WalletsListItem>    wallets;
     private boolean addMenuShown = false;
 
     private TextView totalSum;
@@ -86,6 +90,15 @@ public class SummaryFragment extends Fragment {
                                  "USD",
                                  "Buy gift",
                                  "For my darling"));
+        }
+
+        wallets = new ArrayList <> ();
+
+        for (int i = 0; i < 10; i ++) {
+            wallets.add (new Wallet (43 + r.nextInt (700),
+                                     i,
+                                     "Bank #" + (i + 1),
+                                     Wallet.Type.CARD));
         }
 
         //operations.add(new ShowMore());
@@ -145,6 +158,10 @@ public class SummaryFragment extends Fragment {
         RecyclerView recyclerView2 = (RecyclerView) pagerAdapter.findViewById (R.id.tab_plans_recycler);
         recyclerView2.setLayoutManager (new LinearLayoutManager (getActivity()));
         recyclerView2.setAdapter(new PlansAdapter (getActivity (), plans));
+
+        RecyclerView recyclerView3 = (RecyclerView) pagerAdapter.findViewById (R.id.tab_wallets_recycler);
+        recyclerView3.setLayoutManager (new LinearLayoutManager (getActivity()));
+        recyclerView3.setAdapter(new WalletsAdapter (getActivity (), wallets));
     }
 
 }
