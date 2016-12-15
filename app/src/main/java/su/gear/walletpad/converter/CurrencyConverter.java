@@ -168,6 +168,7 @@ public class CurrencyConverter extends AsyncTaskLoader<ConverterResult> {
 
         try {
             connection = (HttpURLConnection) new URL (url).openConnection ();
+            Log.d (TAG, "Connection established");
         } catch (Exception e) {
             Log.e (TAG, "Failed get connection due to `" + e.getMessage () + "`");
         }
