@@ -30,6 +30,8 @@ public class ConverterFragment extends Fragment {
     private String amountCur;
     private String resultCur;
 
+    private boolean converting = false;
+
     public ConverterFragment() {
         // Required empty public constructor
     }
@@ -48,24 +50,24 @@ public class ConverterFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        from = (Spinner) view.findViewById(R.id.fromCUR);
-        to = (Spinner) view.findViewById(R.id.toCUR);
+        from = (Spinner) view.findViewById (R.id.fromCUR);
+        to   = (Spinner) view.findViewById (R.id.toCUR);
 
-        result = (TextView) view.findViewById(R.id.resultCUR);
-        date = (TextView) view.findViewById(R.id.dateCUR);
-        amount = (EditText) view.findViewById(R.id.amountCUR);
+        result = (TextView) view.findViewById (R.id.resultCUR);
+        date   = (TextView) view.findViewById (R.id.dateCUR);
+        amount = (EditText) view.findViewById (R.id.amountCUR);
 
         fromCur = "RUB";
-        toCur = "RUB";
+        toCur   = "RUB";
 
-        from.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent,
-                                       View itemSelected,
-                                       int selectedItemPosition,
-                                       long selectedId) {
-                fromCur = getResources().getStringArray(R.array.currencies)[selectedItemPosition];
-                amountCur = amount.getText().toString();
-                noticeChanges();
+        from.setOnItemSelectedListener (new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected (AdapterView <?> parent,
+                                        View itemSelected,
+                                        int selectedItemPosition,
+                                        long selectedId) {
+                fromCur = getResources ().getStringArray (R.array.currencies) [selectedItemPosition];
+                amountCur = amount.getText ().toString ();
+                noticeChanges ();
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -73,58 +75,53 @@ public class ConverterFragment extends Fragment {
             }
         });
 
-        to.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent,
-                                       View itemSelected,
-                                       int selectedItemPosition,
-                                       long selectedId) {
-                toCur = getResources().getStringArray(R.array.currencies)[selectedItemPosition];
+        to.setOnItemSelectedListener (new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected (AdapterView <?> parent,
+                                        View itemSelected,
+                                        int selectedItemPosition,
+                                        long selectedId) {
+                toCur = getResources ().getStringArray (R.array.currencies) [selectedItemPosition];
                 amountCur = amount.getText().toString();
                 noticeChanges();
             }
 
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected (AdapterView <?> parent) {}
         });
 
         amount.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() > 0) {
-                    amountCur = charSequence.toString();
-                } else {
-                    amountCur = "0";
-                }
-
+                if (charSequence.length() > 0) { amountCur = charSequence.toString(); }
+                else { amountCur = "0"; }
                 noticeChanges();
             }
 
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
-            public void afterTextChanged(Editable editable) {
-            }
+            public void afterTextChanged(Editable editable) {}
 
         });
     }
 
     private void noticeChanges() {
-        Log.d("ConverterFragment", "From and to: " + fromCur + " to " + toCur);
-
-        if (fromCur != null
+        if (!converting
+                &&fromCur != null
                 && toCur != null
                 && amountCur != null) {
+
+            Log.d("ConverterFragment", "From and to: " + fromCur + " to " + toCur);
+            converting = true;
+
             final ConverterFragment frag = this;
-            Log.d("ConverterFragment", "Loading...");
+            Log.d ("ConverterFragment", "Loading...");
 
             Bundle args = new Bundle();
-            args.putString("from", fromCur);
-            args.putString("to", toCur);
-            args.putDouble("amount", Double.parseDouble(amountCur));
+            args.putString ("from", fromCur);
+            args.putString ("to", toCur);
+            args.putDouble ("amount", Double.parseDouble (amountCur));
 
             getActivity()
                     .getSupportLoaderManager()
@@ -135,7 +132,7 @@ public class ConverterFragment extends Fragment {
                             String to = args.getString("to");
                             double amount = args.getDouble("amount");
 
-                            Log.d("ConverterFragment", "onCreateLoader");
+                            Log.d ("ConverterFragment", "onCreateLoader");
                             return new CurrencyConverter(frag.getContext(), from, to, amount);
                         }
 
@@ -149,6 +146,8 @@ public class ConverterFragment extends Fragment {
                                 date.setText(res.getDate());
                                 Log.d("ConverterFragment", "Loading failed");
                             }
+
+                            converting = false;
                         }
 
                         public void onLoaderReset(Loader<ConverterResult> loader) {
