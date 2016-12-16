@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import su.gear.walletpad.NewOperationActivity;
+import su.gear.walletpad.AddActivity;
 import su.gear.walletpad.R;
 import su.gear.walletpad.adapters.ChildrenPagesAdapter;
 import su.gear.walletpad.adapters.OperationsAdapter;
@@ -130,8 +130,8 @@ public class SummaryFragment extends Fragment {
             public void onClick(View v) {
                 Snackbar.make(v, "Income", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                Intent intent = new Intent(getActivity(), NewOperationActivity.class);
-                intent.putExtra("type", "income");
+                Intent intent = new Intent(getActivity(), AddActivity.class);
+                intent.putExtra("type", "Income");
                 startActivity(intent);
             }
         });
@@ -140,8 +140,8 @@ public class SummaryFragment extends Fragment {
             public void onClick(View v) {
                 Snackbar.make(v, "Expense", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                Intent intent = new Intent(getActivity(), NewOperationActivity.class);
-                intent.putExtra("type", "expense");
+                Intent intent = new Intent(getActivity(), AddActivity.class);
+                intent.putExtra("type", "Expense");
                 startActivity(intent);
             }
         });

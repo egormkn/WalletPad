@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, new SummaryFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.main_fragment_container, new SummaryFragment()).commit();
     }
 
     private boolean isDrawerLocked() {
@@ -395,7 +395,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.main_fragment_container, fragment).commit();
 
         item.setChecked(true);
         setTitle(item.getTitle());

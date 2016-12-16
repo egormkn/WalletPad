@@ -14,6 +14,10 @@ public class Operation implements OperationsListItem /* Parcelable */ {
         INCOME, EXPENSE, TRANSFER
     }
 
+    public static Type getType(int id) {
+        return Type.values()[id];
+    }
+
     /**
      * ID операции
      */

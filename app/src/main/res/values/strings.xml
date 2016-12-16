@@ -33,6 +33,19 @@
     <string name="balance">Balance</string>
     <string name="save">Save</string>
     <string name="save_operation">Save operation</string>
+    <string name="item_expense">Expense</string>
+    <string name="item_income">Income</string>
+    <string name="item_transfer">Transfer</string>
+    <string name="item_plan">Plan</string>
+    <string name="item_wallet">Wallet</string>
+
+    <string-array name="item_types">
+        <item>Expense</item>
+        <item>Income</item>
+        <item>Transfer</item>
+        <item>Plan</item>
+        <item>Wallet</item>
+    </string-array>
 
     <string-array name="currencies">
         <item>RUB</item>
