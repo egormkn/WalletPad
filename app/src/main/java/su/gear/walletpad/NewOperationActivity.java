@@ -4,20 +4,18 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+import su.gear.walletpad.model.Operation;
 
 public class NewOperationActivity extends AppCompatActivity {
 
@@ -36,7 +34,7 @@ public class NewOperationActivity extends AppCompatActivity {
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
-            bar.setTitle("New operation");
+            bar.setTitle("Operation");
         }
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -45,19 +43,41 @@ public class NewOperationActivity extends AppCompatActivity {
         if (user != null) {
             String uid = user.getUid();
         }
-
-        Button save = (Button) findViewById(R.id.save);
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                submitPost();
-            }
-        });
     }
 
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.save_menu, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_save) {
+            Operation operation = new Operation(1, Operation.Type.INCOME, "RUB", 1000, "Описание", "Категория", new ArrayList<String>(), new Date().getTime());
+/*
+this.id = id;
+        this.type = type;
+        this.currency = Currency.getInstance(currencyCode);
+        this.amount = amount;
+        this.description = description;
+        this.category = category;
+        this.tags = tags;
+        this.date = new Date(timestamp);
+ */
+
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+/*
     private void submitPost() {
 
         final String title = ((EditText) findViewById(R.id.description)).getText().toString();
@@ -213,7 +233,8 @@ public class NewOperationActivity extends AppCompatActivity {
 
 
 
-        mDatabase.updateChildren(childUpdates);*/
+        mDatabase.updateChildren(childUpdates);
 
-    }
+    }*/
+
 }

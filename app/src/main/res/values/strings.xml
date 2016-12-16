@@ -31,6 +31,8 @@
 
     <string name="default_currency">RUB</string>
     <string name="balance">Balance</string>
+    <string name="save">Save</string>
+    <string name="save_operation">Save operation</string>
 
     <string-array name="currencies">
         <item>RUB</item>
