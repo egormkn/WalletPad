@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.jaredrummler.materialspinner.MaterialSpinner xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/spinner"
+    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:padding="0dp"
+    android:layout_margin="0dp"
+    app:ms_background_color="@color/colorPrimary"
+    android:textAppearance="@style/AppTheme.Toolbar.TitleText"
+    android:gravity="start" />

@@ -19,9 +19,9 @@
         android:gravity="center"
         android:text="@string/save"
         android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textIsSelectable="false"
-        android:textStyle="bold" />
+        android:textSize="17sp"
+        android:paddingTop="2dp"
+        android:textAppearance="@style/AppTheme.Toolbar.TitleText"/>
 
     <ImageView
         android:layout_width="wrap_content"

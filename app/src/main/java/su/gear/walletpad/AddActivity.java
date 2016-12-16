@@ -4,26 +4,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import su.gear.walletpad.fragments.EditorFragment;
 import su.gear.walletpad.fragments.EditorOperationFragment;
 import su.gear.walletpad.fragments.EditorPlanFragment;
 import su.gear.walletpad.fragments.EditorWalletFragment;
-import su.gear.walletpad.model.Operation;
 
-public class AddActivity extends AppCompatActivity implements MaterialSpinner.OnItemSelectedListener {
+public class AddActivity extends AppCompatActivity implements MaterialSpinner.OnItemSelectedListener, View.OnClickListener {
 
     private static final String TAG = AddActivity.class.getSimpleName();
 
@@ -52,16 +51,10 @@ public class AddActivity extends AppCompatActivity implements MaterialSpinner.On
         menuItems.add(getResources().getString(R.string.item_plan));
         menuItems.add(getResources().getString(R.string.item_wallet));
 
-
-        MaterialSpinner spinner = new MaterialSpinner(bar.getThemedContext());
-
-
+        MaterialSpinner spinner = (MaterialSpinner) LayoutInflater.from(bar.getThemedContext()).inflate(R.layout.toolbar_spinner, toolbar, false);
         spinner.setItems(menuItems);
         spinner.setOnItemSelectedListener(this);
-        spinner.setBackgroundColor(ContextCompat.getColor(bar.getThemedContext(), R.color.colorPrimary));
-
         toolbar.addView(spinner);
-
 
         Intent intent = getIntent();
         switch (intent.getStringExtra("type")) {
@@ -79,37 +72,17 @@ public class AddActivity extends AppCompatActivity implements MaterialSpinner.On
         fragmentManager.beginTransaction()
                 .replace(R.id.add_fragment_container, (Fragment) currentFragment)
                 .commit();
+
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.save_menu, menu);
+        MenuItemCompat
+                .getActionView(menu.findItem(R.id.action_save_menuitem))
+                .setOnClickListener(this);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_save) {
-            Operation operation = new Operation(1, Operation.Type.INCOME, "RUB", 1000, "Описание", "Категория", new ArrayList<String>(), new Date().getTime());
-/*
-this.id = id;
-        this.type = type;
-        this.currency = Currency.getInstance(currencyCode);
-        this.amount = amount;
-        this.description = description;
-        this.category = category;
-        this.tags = tags;
-        this.date = new Date(timestamp);
- */
-            currentFragment.onSave();
-            finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -129,5 +102,12 @@ this.id = id;
         fragmentManager.beginTransaction()
                 .replace(R.id.add_fragment_container, (Fragment) currentFragment)
                 .commit();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (currentFragment.onSave()) {
+            finish();
+        }
     }
 }

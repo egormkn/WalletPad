@@ -10,4 +10,5 @@
     android:minHeight="?attr/actionBarSize"
     android:theme="@style/AppTheme.DarkActionBar"
     app:popupTheme="@style/AppTheme.PopupOverlay"
+    app:contentInsetStartWithNavigation="0dp"
     tools:showIn="@layout/activity_main" />

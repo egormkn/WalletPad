@@ -1,30 +1,17 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="su.gear.walletpad.fragments.StatisticsFragment">
-
-    <!-- TODO: "New operation" activity -->
-
-    <View
-        android:id="@+id/visible"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
-
-    <View
-        android:id="@+id/masked"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
+    android:padding="16dp"
+    tools:context="su.gear.walletpad.fragments.EditorOperationFragment">
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/edit_operation_amount_holder"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp">
+        android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/add_operation_amount"
+            android:id="@+id/edit_operation_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Amount"
@@ -37,19 +24,35 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/edit_operation_descr_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
+        android:layout_below="@id/edit_operation_amount_holder">
 
         <EditText
-            android:id="@+id/add_operation_description"
+            android:id="@+id/edit_operation_descr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Description"
             android:imeOptions="actionNext"
-            android:inputType="numberDecimal" />
+            android:inputType="textShortMessage" />
 
     </android.support.design.widget.TextInputLayout>
 
-</FrameLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/edit_operation_tags_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_operation_descr_holder">
+
+        <EditText
+            android:id="@+id/edit_operation_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tags"
+            android:imeOptions="actionNext"
+            android:inputType="textShortMessage" />
+
+    </android.support.design.widget.TextInputLayout>
+
+</RelativeLayout>

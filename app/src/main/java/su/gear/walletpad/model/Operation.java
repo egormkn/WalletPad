@@ -11,7 +11,7 @@ import java.util.List;
 public class Operation implements OperationsListItem /* Parcelable */ {
 
     public enum Type {
-        INCOME, EXPENSE, TRANSFER
+        INCOME, EXPENSE, TRANSFER;
     }
 
     public static Type getType(int id) {

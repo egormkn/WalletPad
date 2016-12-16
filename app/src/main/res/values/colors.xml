@@ -13,9 +13,9 @@
     <color name="colorSecondaryText">#22313F</color>
     <color name="overlayColor">#88CFD8DC</color>
 
-    <color name="colorControlNormal">#c5c5c5</color>
+    <!-- <color name="colorControlNormal">#c5c5c5</color>
     <color name="colorControlActivated">@color/colorAccent</color>
-    <color name="colorControlHighlight">@color/colorAccentLight</color>
+    <color name="colorControlHighlight">@color/colorAccentLight</color> -->
 
     <color name="textColorMain">#263238</color>
     <color name="textColorGray">#607d8b</color>
