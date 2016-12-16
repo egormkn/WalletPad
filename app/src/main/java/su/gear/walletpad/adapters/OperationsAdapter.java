@@ -58,7 +58,7 @@ public class OperationsAdapter extends RecyclerView.Adapter {
             Operation operation = (Operation) item;
             OperationViewHolder operationHolder = (OperationViewHolder) holder;
             operationHolder.titleView.setText(operation.getDescription());
-            operationHolder.sumView.setText(String.valueOf(operation.getSum()));
+            operationHolder.sumView.setText(String.valueOf(operation.getAmount()));
             operationHolder.tagsView.setText(IOUtils.join(operation.getTags(), ", "));
             if (position % 4 == 0) {
                 operationHolder.categoryIconView.setIconColor(Color.RED);

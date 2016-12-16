@@ -1,5 +1,7 @@
 package su.gear.walletpad.model;
 
+import java.util.Currency;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,7 +12,7 @@ public class Operation implements OperationsListItem /* Parcelable */ {
 
     public enum Type {
         INCOME, EXPENSE, TRANSFER
-    };
+    }
 
     /**
      * ID операции
@@ -25,12 +27,12 @@ public class Operation implements OperationsListItem /* Parcelable */ {
     /**
      * Валюта операции
      */
-    private final String currency;
+    private final Currency currency;
 
     /**
      * Сумма операции в указанной валюте
      */
-    private final double sum;
+    private final double amount;
 
     /**
      * Описание операции
@@ -48,27 +50,27 @@ public class Operation implements OperationsListItem /* Parcelable */ {
     private final List<String> tags;
 
     /**
-     * UNIX timestamp
+     * UNIX date
      */
-    private final long timestamp;
+    private final Date date;
 
-    public Operation(long id, Type type, String currency, double sum, String description, String category, List<String> tags, long timestamp) {
+    public Operation(long id, Type type, String currencyCode, double amount, String description, String category, List<String> tags, long timestamp) {
         this.id = id;
         this.type = type;
-        this.currency = currency;
-        this.sum = sum;
+        this.currency = Currency.getInstance(currencyCode);
+        this.amount = amount;
         this.description = description;
         this.category = category;
         this.tags = tags;
-        this.timestamp = timestamp;
+        this.date = new Date(timestamp);
     }
 
     public long getId() {
         return id;
     }
 
-    public double getSum() {
-        return sum;
+    public double getAmount() {
+        return amount;
     }
 
     public String getDescription() {
@@ -79,7 +81,7 @@ public class Operation implements OperationsListItem /* Parcelable */ {
         return category;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -87,8 +89,8 @@ public class Operation implements OperationsListItem /* Parcelable */ {
         return tags;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public Date getDate() {
+        return date;
     }
 
     public Type getType() {
