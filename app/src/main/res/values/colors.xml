@@ -5,7 +5,8 @@
     <color name="colorAccent">#0288D1</color>
     <color name="colorAccentLight">#42a5f5</color>
     <color name="colorAccentRipple">#bbdefb</color>
-    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryText">#FFFFFF</color>
+    <color name="colorPrimaryText2">#CCCCCC</color>
     <color name="windowBackground">#EEEEEE</color>
     <color name="statusBar">#263238</color>
     <color name="colorSecondary">#CFD8DC</color>
@@ -22,4 +23,13 @@
     <color name="income">#4CAF50</color>
     <color name="expense">#F44336</color>
     <color name="transfer">#03A9F4</color>
+    <color name="colorTransfer">#673ab7</color>
+    <color name="colorTransferPressed">#7e57c2</color>
+    <color name="colorTransferRipple">#b39ddb</color>
+    <color name="colorIncome">#4caf50</color>
+    <color name="colorIncomePressed">#66bb6a</color>
+    <color name="colorIncomeRipple">#a5d6a7</color>
+    <color name="colorExpense">#DA4336</color>
+    <color name="colorExpensePressed">#E75043</color>
+    <color name="colorExpenseRipple">#99FFFFFF</color>
 </resources>

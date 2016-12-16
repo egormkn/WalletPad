@@ -6,17 +6,14 @@
     android:layout_height="match_parent"
     tools:context="su.gear.walletpad.fragments.SummaryFragment">
 
-    <!-- TODO: Needs some improvements -->
-
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
-            android:id="@+id/appbarlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorSecondary">
+            android:background="@color/colorPrimary">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -30,19 +27,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:paddingTop="30dp"
+                    android:paddingTop="@dimen/summary_amount_paddingtop"
                     android:text="@string/balance"
-                    android:textColor="@color/colorSecondaryText"
-                    android:textSize="16sp" />
+                    android:textColor="@color/colorPrimaryText2"
+                    android:textSize="@dimen/summary_amount_balancetext" />
 
                 <TextView
                     android:id="@+id/summary_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:paddingBottom="24dp"
-                    android:textColor="@color/colorSecondaryText"
-                    android:textSize="40sp"
+                    android:paddingBottom="@dimen/summary_amount_paddingbottom"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/summary_amount_text"
                     tools:text="123456 $" />
 
             </LinearLayout>
@@ -50,7 +47,10 @@
             <android.support.design.widget.TabLayout
                 android:id="@+id/tablayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:tabIndicatorColor="@color/colorAccentLight"
+                app:tabSelectedTextColor="@color/colorPrimaryText"
+                app:tabTextColor="@color/colorPrimaryText2" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -80,6 +80,9 @@
         android:longClickable="true"
         android:visibility="gone" />
 
+
+    <!-- TODO: Menu needs some improvements -->
+
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/add_menu"
         android:layout_width="match_parent"
@@ -96,49 +99,68 @@
         app:menu_icon="@drawable/fab_add"
         app:menu_labels_colorNormal="#333333"
         app:menu_labels_colorPressed="#444444"
-        app:menu_labels_colorRipple="#66FFFFFF"
-        app:menu_labels_cornerRadius="3dp"
-        app:menu_labels_ellipsize="none"
-        app:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
-        app:menu_labels_margin="0dp"
-        app:menu_labels_maxLines="-1"
-        app:menu_labels_padding="8dp"
-        app:menu_labels_paddingBottom="4dp"
-        app:menu_labels_paddingLeft="8dp"
-        app:menu_labels_paddingRight="8dp"
-        app:menu_labels_paddingTop="4dp"
-        app:menu_labels_position="left"
-        app:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
-        app:menu_labels_showShadow="true"
-        app:menu_labels_singleLine="false"
-        app:menu_labels_textColor="#FFFFFF"
-        app:menu_labels_textSize="14sp"
-        app:menu_openDirection="up"
-        app:menu_shadowYOffset="2dp">
+        app:menu_labels_colorRipple="#66FFFFFF">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_menu_wallet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_wallet"
+            app:fab_colorNormal="@color/colorTransfer"
+            app:fab_colorPressed="@color/colorTransferPressed"
+            app:fab_colorRipple="@color/colorTransferRipple"
+            app:fab_label="Wallet"
+            app:fab_size="mini"
+            tools:ignore="VectorDrawableCompat" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_menu_plan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/fab_plan"
+            app:fab_colorNormal="@color/colorTransfer"
+            app:fab_colorPressed="@color/colorTransferPressed"
+            app:fab_colorRipple="@color/colorTransferRipple"
+            app:fab_label="Plan"
+            app:fab_size="mini"
+            tools:ignore="VectorDrawableCompat" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/add_menu_transfer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/fab_add"
+            android:src="@drawable/fab_transfer"
+            app:fab_colorNormal="@color/colorTransfer"
+            app:fab_colorPressed="@color/colorTransferPressed"
+            app:fab_colorRipple="@color/colorTransferRipple"
             app:fab_label="Transfer"
-            app:fab_size="mini" />
+            app:fab_size="mini"
+            tools:ignore="VectorDrawableCompat" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/add_menu_income"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/fab_add"
+            android:src="@drawable/fab_income"
+            app:fab_colorNormal="@color/colorIncome"
+            app:fab_colorPressed="@color/colorIncomePressed"
+            app:fab_colorRipple="@color/colorIncomeRipple"
             app:fab_label="Income"
-            app:fab_size="mini" />
+            app:fab_size="normal"
+            tools:ignore="VectorDrawableCompat" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/add_menu_expense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/fab_add"
+            android:src="@drawable/fab_expense"
+            app:fab_colorNormal="@color/colorExpense"
+            app:fab_colorPressed="@color/colorExpensePressed"
+            app:fab_colorRipple="@color/colorExpenseRipple"
             app:fab_label="Expense"
-            app:fab_size="mini" />
+            app:fab_size="normal"
+            tools:ignore="VectorDrawableCompat" />
 
     </com.github.clans.fab.FloatingActionMenu>
 
