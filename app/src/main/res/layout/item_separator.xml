@@ -15,7 +15,6 @@
         android:textAllCaps="true"
         android:textColor="@color/colorAccent"
         android:textStyle="bold"
-        tools:targetApi="ice_cream_sandwich"
         tools:text="30 ноября 2016" />
 
     <View

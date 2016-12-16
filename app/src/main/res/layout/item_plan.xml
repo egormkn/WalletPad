@@ -5,51 +5,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:layout_marginTop="@dimen/recyclerview_item_spacing"
+    android:layout_marginBottom="@dimen/recyclerview_item_spacing"
+    android:layout_marginLeft="@dimen/recyclerview_item_margin"
+    android:layout_marginRight="@dimen/recyclerview_item_margin">
 
     <su.gear.walletpad.views.IconView
         android:id="@+id/plan_category"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:shape="circle"
-        app:icon_width="24dp"
-        app:icon_height="24dp"
+        android:layout_width="@dimen/operation_iconview_size"
+        android:layout_height="@dimen/operation_iconview_size"
+        android:layout_marginEnd="@dimen/operation_icon_margin"
+        android:layout_marginRight="@dimen/operation_icon_margin"
+        app:icon_color="@color/white"
+        app:icon_height="@dimen/operation_icon_size"
+        app:icon_width="@dimen/operation_icon_size"
         app:icon="@drawable/ic_summary"
-        />
+        app:shape="circle" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/operation_iconview_size"
+        android:orientation="vertical"
+        android:layout_toEndOf="@+id/plan_category"
+        android:layout_toLeftOf="@+id/plan_sum"
+        android:layout_toRightOf="@+id/plan_category"
+        android:layout_toStartOf="@+id/plan_sum"
+        android:layout_alignParentTop="true">
 
     <TextView
         android:id="@+id/plan_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        android:layout_toEndOf="@+id/plan_category"
-        android:layout_toLeftOf="@+id/plan_sum"
-        android:layout_toRightOf="@+id/plan_category"
-        android:layout_toStartOf="@+id/plan_sum"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom"
         android:ellipsize="end"
         android:maxLines="1"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:text="Text for test"
-        />
+        android:text="Новогодние подарки" />
 
     <TextView
         android:id="@+id/plan_tags"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/plan_title"
-        android:layout_marginTop="4dp"
-        android:layout_toEndOf="@+id/plan_category"
-        android:layout_toLeftOf="@+id/plan_sum"
-        android:layout_toRightOf="@+id/plan_category"
-        android:layout_toStartOf="@+id/plan_sum"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:layout_marginTop="3dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textSize="16sp"
         tools:text="Техника, Для дома" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/plan_sum"

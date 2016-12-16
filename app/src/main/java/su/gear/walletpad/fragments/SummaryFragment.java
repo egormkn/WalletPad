@@ -1,9 +1,7 @@
 package su.gear.walletpad.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,10 +9,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
@@ -22,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import su.gear.walletpad.NewOperationActivity;
 import su.gear.walletpad.R;
 import su.gear.walletpad.adapters.ChildrenPagesAdapter;
 import su.gear.walletpad.adapters.OperationsAdapter;
@@ -100,26 +100,67 @@ public class SummaryFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
 
-        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+
+        TextView summaryAmount = (TextView) view.findViewById(R.id.summary_amount);
+        summaryAmount.setText("123456 $");
+
+        FloatingActionButton fab_income = (FloatingActionButton) view.findViewById(R.id.add_menu_income),
+                fab_expense = (FloatingActionButton) view.findViewById(R.id.add_menu_expense),
+                fab_transfer = (FloatingActionButton) view.findViewById(R.id.add_menu_transfer);
+
+        fab_income.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (addMenuShown) {
-                    addMenuShown = false;
-                    //view.findViewById(R.id.fab).setForeground(ContextCompat.getDrawable(getActivity(), R.drawable.button_focused));
-                }
-                Intent intent = new Intent(getActivity(), NewOperationActivity.class);
-                startActivity(intent);
+                Snackbar.make(v, "Income", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+        fab_expense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v, "Expense", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+        fab_transfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v, "Transfer", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+        /*
+        Intent intent = new Intent(getActivity(), NewOperationActivity.class);
+                //startActivity(intent);
                 Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                /*view.findViewById(R.id.appbarlayout).setAlpha(0.5f);
-                view.findViewById(R.id.viewpager).setAlpha(0.5f);*/
+         */
+
+        final View overlay = view.findViewById(R.id.overlay);
+        final FloatingActionMenu menu = (FloatingActionMenu) view.findViewById(R.id.add_menu);
+        menu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+            @Override
+            public void onMenuToggle(boolean opened) {
+                if (opened) {
+                    overlay.setVisibility(View.VISIBLE);
+                } else {
+                    overlay.setVisibility(View.GONE);
+                }
+            }
+        });
+        overlay.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (overlay.getVisibility() == View.VISIBLE) {
+                    overlay.setVisibility(View.GONE);
+                    menu.close(true);
+                }
+                return true;
             }
         });
 
-
-
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         ChildrenPagesAdapter pagerAdapter = new ChildrenPagesAdapter(viewPager);
         viewPager.setAdapter(pagerAdapter);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tablayout);
@@ -127,7 +168,7 @@ public class SummaryFragment extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                fab.show();
+                //fab.show();
             }
 
             @Override

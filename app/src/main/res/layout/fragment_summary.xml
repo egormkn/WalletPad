@@ -1,4 +1,4 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_main"
@@ -6,108 +6,140 @@
     android:layout_height="match_parent"
     tools:context="su.gear.walletpad.fragments.SummaryFragment">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbarlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorSecondary">
+    <!-- TODO: Needs some improvements -->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="?selectableItemBackgroundBorderless"
-            android:clickable="true"
-            app:layout_scrollFlags="scroll|snap">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="30dp"
-                android:text="Balance"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/total_sum"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingBottom="24dp"
-                android:text="123456 $"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="40sp" />
-
-        </LinearLayout>
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tablayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <include layout="@layout/tab_summary" />
-
-        <include layout="@layout/tab_wallets" />
-
-        <include layout="@layout/tab_plans" />
-    </android.support.v4.view.ViewPager>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"
-        app:layout_behavior="su.gear.walletpad.adapters.ScrollAwareFABBehavior"
-        app:srcCompat="@drawable/ic_add" />
-
-    <!-- <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_1"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbarlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorSecondary">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:orientation="vertical"
+                app:layout_scrollFlags="scroll|snap">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="30dp"
+                    android:text="@string/balance"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/summary_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="24dp"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="40sp"
+                    tools:text="123456 $" />
+
+            </LinearLayout>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tablayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <include layout="@layout/tab_summary" />
+
+            <include layout="@layout/tab_wallets" />
+
+            <include layout="@layout/tab_plans" />
+        </android.support.v4.view.ViewPager>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:longClickable="true"
+        android:visibility="gone" />
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/add_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end|bottom"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        app:menu_backgroundColor="@color/overlayColor"
+        app:menu_buttonSpacing="0dp"
+        app:menu_colorNormal="@color/colorAccent"
+        app:menu_colorPressed="@color/colorAccentLight"
+        app:menu_colorRipple="@color/colorAccentRipple"
+        app:menu_icon="@drawable/fab_add"
+        app:menu_labels_colorNormal="#333333"
+        app:menu_labels_colorPressed="#444444"
+        app:menu_labels_colorRipple="#66FFFFFF"
+        app:menu_labels_cornerRadius="3dp"
+        app:menu_labels_ellipsize="none"
+        app:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        app:menu_labels_margin="0dp"
+        app:menu_labels_maxLines="-1"
+        app:menu_labels_padding="8dp"
+        app:menu_labels_paddingBottom="4dp"
+        app:menu_labels_paddingLeft="8dp"
+        app:menu_labels_paddingRight="8dp"
+        app:menu_labels_paddingTop="4dp"
+        app:menu_labels_position="left"
+        app:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+        app:menu_labels_showShadow="true"
+        app:menu_labels_singleLine="false"
+        app:menu_labels_textColor="#FFFFFF"
+        app:menu_labels_textSize="14sp"
+        app:menu_openDirection="up"
+        app:menu_shadowYOffset="2dp">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_menu_transfer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@android:drawable/ic_menu_compass"
-            android:visibility="invisible"
-            app:backgroundTint="@color/colorAccent"
-            app:fabSize="mini" />
+            android:src="@drawable/fab_add"
+            app:fab_label="Transfer"
+            app:fab_size="mini" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_2"
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_menu_income"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@android:drawable/ic_menu_myplaces"
-            android:visibility="invisible"
-            app:backgroundTint="@color/colorAccent"
-            app:fabSize="mini" />
+            android:src="@drawable/fab_add"
+            app:fab_label="Income"
+            app:fab_size="mini" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_3"
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_menu_expense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@android:drawable/ic_menu_share"
-            android:visibility="invisible"
-            app:backgroundTint="@color/colorAccent"
-            app:fabSize="mini" />
-    </FrameLayout>-->
+            android:src="@drawable/fab_add"
+            app:fab_label="Expense"
+            app:fab_size="mini" />
 
-</android.support.design.widget.CoordinatorLayout>
+    </com.github.clans.fab.FloatingActionMenu>
+
+</FrameLayout>

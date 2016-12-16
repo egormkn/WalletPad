@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <include layout="@layout/toolbar" />
 
@@ -25,7 +26,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             app:headerLayout="@layout/nav_header"
-            app:menu="@menu/nav_drawer" />
+            app:menu="@menu/nav_menu" />
 
     </android.support.v4.widget.DrawerLayout>
 

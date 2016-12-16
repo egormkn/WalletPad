@@ -30,6 +30,7 @@
     <string name="please_wait">Please, wait…</string>
 
     <string name="default_currency">RUB</string>
+    <string name="balance">Balance</string>
 
     <string-array name="currencies">
         <item>RUB</item>

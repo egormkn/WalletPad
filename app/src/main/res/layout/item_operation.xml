@@ -10,7 +10,6 @@
     android:layout_marginRight="@dimen/recyclerview_item_margin">
 
     <su.gear.walletpad.views.IconView
-        android:background="#CCC"
         android:id="@+id/operation_category"
         android:layout_width="@dimen/operation_iconview_size"
         android:layout_height="@dimen/operation_iconview_size"
@@ -23,36 +22,40 @@
         app:icon="@drawable/ic_default"
         app:shape="circle" />
 
-    <TextView
-        android:id="@+id/operation_title"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
+        android:layout_height="@dimen/operation_iconview_size"
+        android:orientation="vertical"
         android:layout_toEndOf="@+id/operation_category"
         android:layout_toLeftOf="@+id/operation_sum"
         android:layout_toRightOf="@+id/operation_category"
         android:layout_toStartOf="@+id/operation_sum"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        tools:text="Покупка в Юлмарт" />
+        android:layout_alignParentTop="true">
 
-    <TextView
-        android:id="@+id/operation_tags"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/operation_title"
-        android:layout_marginTop="4dp"
-        android:layout_toEndOf="@+id/operation_category"
-        android:layout_toLeftOf="@+id/operation_sum"
-        android:layout_toRightOf="@+id/operation_category"
-        android:layout_toStartOf="@+id/operation_sum"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textSize="16sp"
-        tools:text="Техника, Для дома" />
+        <TextView
+            android:id="@+id/operation_title"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Покупка в Юлмарт" />
+
+        <TextView
+            android:id="@+id/operation_tags"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:layout_marginTop="3dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="16sp"
+            tools:text="Техника, Для дома" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/operation_sum"
