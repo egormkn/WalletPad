@@ -1,5 +1,6 @@
 package su.gear.walletpad.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -23,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import su.gear.walletpad.AddActivity;
 import su.gear.walletpad.R;
 import su.gear.walletpad.adapters.ChildrenPagesAdapter;
 import su.gear.walletpad.adapters.OperationsAdapter;
@@ -128,6 +130,9 @@ public class SummaryFragment extends Fragment {
             public void onClick(View v) {
                 Snackbar.make(v, "Income", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Intent intent = new Intent(getActivity(), AddActivity.class);
+                intent.putExtra("type", "Income");
+                startActivity(intent);
             }
         });
         fab_expense.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +140,9 @@ public class SummaryFragment extends Fragment {
             public void onClick(View v) {
                 Snackbar.make(v, "Expense", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Intent intent = new Intent(getActivity(), AddActivity.class);
+                intent.putExtra("type", "Expense");
+                startActivity(intent);
             }
         });
         fab_transfer.setOnClickListener(new View.OnClickListener() {
@@ -146,7 +154,7 @@ public class SummaryFragment extends Fragment {
         });
         /*
         Intent intent = new Intent(getActivity(), NewOperationActivity.class);
-                //startActivity(intent);
+        startActivity(intent);
                 Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
          */

@@ -40,7 +40,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".NewOperationActivity"
+        <activity android:name=".AddActivity"
             android:parentActivityName=".MainActivity"
             tools:ignore="UnusedAttribute">
 
