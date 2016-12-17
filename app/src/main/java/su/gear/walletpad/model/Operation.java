@@ -1,8 +1,12 @@
 package su.gear.walletpad.model;
 
+import android.text.TextUtils;
+
 import java.util.Currency;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Объект операции (доход/расход/перевод...)
@@ -99,5 +103,17 @@ public class Operation implements OperationsListItem /* Parcelable */ {
 
     public Type getType() {
         return type;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("amount", String.valueOf(amount));
+        map.put("type", "income");
+        map.put("currency", currency.getCurrencyCode());
+        map.put("description", description);
+        map.put("category", category);
+        map.put("tags", TextUtils.join(",", tags));
+        map.put("date", String.valueOf(date.getTime()));
+        return map;
     }
 }

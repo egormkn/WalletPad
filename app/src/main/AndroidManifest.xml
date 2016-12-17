@@ -40,7 +40,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".AddActivity"
+        <activity
+            android:name=".AddActivity"
+            android:parentActivityName=".MainActivity"
+            tools:ignore="UnusedAttribute">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".ProfileActivity"
             android:parentActivityName=".MainActivity"
             tools:ignore="UnusedAttribute">
 

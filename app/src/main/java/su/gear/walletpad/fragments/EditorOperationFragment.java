@@ -9,7 +9,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -21,14 +24,8 @@ public class EditorOperationFragment extends Fragment implements EditorFragment 
 
     private EditText amountEditText, descrEditText, tagsEditText;
 
+    // Required empty public constructor
     public EditorOperationFragment() {
-        // Required empty public constructor
-    }
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -55,18 +52,19 @@ public class EditorOperationFragment extends Fragment implements EditorFragment 
         double amount = Double.parseDouble(amountText);
         List<String> tags = Arrays.asList(tagsText.split(","));
 
-        Operation operation = new Operation(1, Operation.Type.INCOME, "RUB", 1000, "Описание", "Категория", new ArrayList<String>(), new Date().getTime());
-/*
-this.id = id;
-        this.type = type;
-        this.currency = Currency.getInstance(currencyCode);
-        this.amount = amount;
-        this.description = description;
-        this.category = category;
-        this.tags = tags;
-        this.date = new Date(timestamp);
- */
+        Operation operation = new Operation(1, Operation.Type.INCOME, "RUB", 1000, "Описание", "Категория", tags, new Date().getTime());
         Toast.makeText(getActivity(), "" + amount + " " + descrText, Toast.LENGTH_SHORT).show();
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth != null && auth.getCurrentUser() != null) {
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference newRef = database
+                    .getReference("users")
+                    .child(auth.getCurrentUser().getUid())
+                    .child("operations").push();
+            newRef.setValue(operation.toMap());
+        }
 
         return true;
     }

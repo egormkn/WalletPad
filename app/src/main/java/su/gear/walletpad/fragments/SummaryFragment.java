@@ -121,44 +121,6 @@ public class SummaryFragment extends Fragment {
         TextView summaryAmount = (TextView) view.findViewById(R.id.summary_amount);
         summaryAmount.setText("123456 $");
 
-        FloatingActionButton fab_income = (FloatingActionButton) view.findViewById(R.id.add_menu_income),
-                fab_expense = (FloatingActionButton) view.findViewById(R.id.add_menu_expense),
-                fab_transfer = (FloatingActionButton) view.findViewById(R.id.add_menu_transfer);
-
-        fab_income.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, "Income", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                Intent intent = new Intent(getActivity(), AddActivity.class);
-                intent.putExtra("type", "Income");
-                startActivity(intent);
-            }
-        });
-        fab_expense.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, "Expense", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                Intent intent = new Intent(getActivity(), AddActivity.class);
-                intent.putExtra("type", "Expense");
-                startActivity(intent);
-            }
-        });
-        fab_transfer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, "Transfer", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        /*
-        Intent intent = new Intent(getActivity(), NewOperationActivity.class);
-        startActivity(intent);
-                Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-         */
-
         final View overlay = view.findViewById(R.id.overlay);
         final FloatingActionMenu menu = (FloatingActionMenu) view.findViewById(R.id.add_menu);
         menu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
@@ -179,6 +141,36 @@ public class SummaryFragment extends Fragment {
                     menu.close(true);
                 }
                 return true;
+            }
+        });
+
+        FloatingActionButton fab_income = (FloatingActionButton) view.findViewById(R.id.add_menu_income),
+                fab_expense = (FloatingActionButton) view.findViewById(R.id.add_menu_expense),
+                fab_transfer = (FloatingActionButton) view.findViewById(R.id.add_menu_transfer);
+
+        fab_income.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menu.close(false);
+                Intent intent = new Intent(getActivity(), AddActivity.class);
+                intent.putExtra("type", "Income");
+                startActivity(intent);
+            }
+        });
+        fab_expense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menu.close(false);
+                Intent intent = new Intent(getActivity(), AddActivity.class);
+                intent.putExtra("type", "Expense");
+                startActivity(intent);
+            }
+        });
+        fab_transfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v, "Transfer", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
 
