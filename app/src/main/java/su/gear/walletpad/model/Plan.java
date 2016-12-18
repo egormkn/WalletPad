@@ -21,7 +21,16 @@ public class Plan implements PlansListItem {
                 if (type.equals ("rest"))   { return REST; }
                 if (type.equals ("tax"))    { return TAX; }
             }
+
             return OTHER;
+        }
+
+        public static Type fetchType (int index) {
+            if (index >= 0 && index < values ().length) {
+                return values () [index];
+            }
+
+            return null;
         }
     }
 

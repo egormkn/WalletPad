@@ -16,11 +16,28 @@ public class Wallet implements WalletsListItem {
         CASH,
         DEPOSIT,
         STOCK,
-        OTHER
-    }
+        OTHER;
 
-    public static Type toType(int id) {
-        return Type.values()[id];
+        public static Type fetchType (String type) {
+            if (type != null && type.length () > 0) {
+                type = type.toLowerCase ().trim ();
+
+                if (type.equals ("card"))    { return CARD; }
+                if (type.equals ("cash"))    { return CASH; }
+                if (type.equals ("deposit")) { return DEPOSIT; }
+                if (type.equals ("stock"))   { return STOCK; }
+            }
+
+            return OTHER;
+        }
+
+        public static Type fetchType (int index) {
+            if (index >= 0 && index < values ().length) {
+                return values () [index];
+            }
+
+            return null;
+        }
     }
 
     /**

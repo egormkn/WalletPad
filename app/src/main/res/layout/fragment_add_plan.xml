@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingTop="8dp"
-    tools:context="su.gear.walletpad.fragments.StatisticsFragment"
+    tools:context="su.gear.walletpad.fragments.EditorPlanFragment"
     android:background="@color/windowBackground">
 
     <TextView
@@ -105,6 +105,7 @@
                 android:maxLength="16"
                 android:maxLines="1"
                 android:textSize="20sp"
+                android:textColor="@color/colorAccentLight"
                 />
 
         </android.support.design.widget.TextInputLayout>
@@ -139,6 +140,7 @@
                 android:maxLength="16"
                 android:maxLines="1"
                 android:textSize="20sp"
+                android:textColor="@color/colorAccentLight"
                 />
 
         </android.support.design.widget.TextInputLayout>
