@@ -1,12 +1,27 @@
 package su.gear.walletpad.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.samsistemas.calendarview.decor.DayDecorator;
+import com.samsistemas.calendarview.widget.CalendarView;
+import com.samsistemas.calendarview.widget.DayView;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 import su.gear.walletpad.R;
 
@@ -62,10 +77,59 @@ public class BudgetFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_budget, container, false);
+        return inflater.inflate (R.layout.fragment_budget, container, false);
+    }
+
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated (view, savedInstanceState);
+
+        final List <Double> values = new ArrayList <> ();
+        double tinfimum = 0, tsupremum = 0;
+        Random r = new Random ();
+
+        for (int i = 0; i < 30; i ++) {
+            double value = r.nextDouble () * 1000 * (r.nextBoolean () ? 1 : -1);
+            values.add (value);
+
+            tinfimum  = Math.min (tinfimum, value);
+            tsupremum = Math.max (tsupremum, value);
+        }
+
+        final double infimum  = tinfimum;
+        final double supremum = tsupremum;
+
+        final CalendarView calendar = (CalendarView) view.findViewById (R.id.calendar_view);
+        calendar.setFirstDayOfWeek (Calendar.MONDAY);
+        calendar.setIsOverflowDateVisible (false);
+
+        List <DayDecorator> decorators = new ArrayList <> ();
+        decorators.add (new DayDecorator() {
+            public void decorate(DayView day) {
+                int number = Integer.parseInt (day.getText ().toString ());
+
+                if (number >= 0 && number < values.size ()) {
+                    double value = values.get (number);
+                    if (value < 0) { day.setBackgroundColor (Color.argb (25 + (int) (60 * value / infimum), 255, 0, 0)); }
+                    else if (value > 0) { day.setBackgroundColor (Color.argb (25 + (int) (60 * value / supremum), 0, 225, 0)); }
+                }
+            }
+        });
+        calendar.setDecoratorsList (decorators);
+
+        calendar.refreshCalendar (Calendar.getInstance (Locale.getDefault ()));
+
+        calendar.setOnDateClickListener (new CalendarView.OnDateClickListener () {
+            public void onDateClick (Date date) {
+                calendar.refreshCalendar (Calendar.getInstance (Locale.getDefault ()));
+            }
+        });
+
+        //DayView today = calendar.findViewByDate (new Date (System.currentTimeMillis ()));
+        //today.setBackground (new ColorDrawable (Color.RED));
     }
 
     // TODO: Rename method, update argument and hook method into UI event
