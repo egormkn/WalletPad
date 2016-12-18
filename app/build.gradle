@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "su.gear.walletpad"
-        minSdkVersion 16
+        minSdkVersion 14
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -42,7 +42,6 @@ dependencies {
     compile 'com.jaredrummler:material-spinner:1.1.0'
     compile 'com.github.npanigrahy:Custom-Calendar-View:v1.0'
     compile 'com.github.BlackBoxVision:material-calendar-view:v1.2.3'
-    compile 'com.github.marcohc:robotocalendarview:3.1.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
