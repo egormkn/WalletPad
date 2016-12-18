@@ -21,6 +21,7 @@ public class Plan implements PlansListItem {
                 if (type.equals ("rest"))   { return REST; }
                 if (type.equals ("tax"))    { return TAX; }
             }
+
             return OTHER;
         }
     }

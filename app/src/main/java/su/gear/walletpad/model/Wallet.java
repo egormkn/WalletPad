@@ -16,17 +16,26 @@ public class Wallet implements WalletsListItem {
         CASH,
         DEPOSIT,
         STOCK,
-        OTHER
-    }
+        OTHER;
 
-    public static Type toType(int id) {
-        return Type.values()[id];
+        public static Type fetchType (String type) {
+            if (type != null && type.length () > 0) {
+                type = type.toLowerCase ().trim ();
+
+                if (type.equals ("card"))    { return CARD; }
+                if (type.equals ("cash"))    { return CASH; }
+                if (type.equals ("deposit")) { return DEPOSIT; }
+                if (type.equals ("stock"))   { return STOCK; }
+            }
+
+            return OTHER;
+        }
     }
 
     /**
      * ID кошелька
      */
-    private final String id;
+    private final long id;
 
     /**
      * Тип кошелька
@@ -36,7 +45,7 @@ public class Wallet implements WalletsListItem {
     /**
      * Валюта операции
      */
-    private final Currency currency;
+    private final String currency;
 
     /**
      * Сумма
@@ -58,7 +67,7 @@ public class Wallet implements WalletsListItem {
      */
     private List<Operation> operations;
 
-    public Wallet(double amount, String id, Type type, Currency currency, String title, boolean showInTotal, List<Operation> operations) {
+    public Wallet(double amount, long id, Type type, String currency, String title, boolean showInTotal, List<Operation> operations) {
         this.amount = amount;
         this.id = id;
         this.type = type;
@@ -72,11 +81,11 @@ public class Wallet implements WalletsListItem {
         return amount;
     }
 
-    public Currency getCurrency() {
+    public String getCurrency() {
         return currency;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
