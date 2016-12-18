@@ -41,8 +41,8 @@ public class WalletsAdapter extends RecyclerView.Adapter {
         Wallet wallet = (Wallet) item;
 
         WalletsAdapter.WalletViewHolder walletHolder = (WalletsAdapter.WalletViewHolder) holder;
-        walletHolder.title.setText       (wallet.title ());
-        walletHolder.amount.setText      (wallet.amount () + "");
+        walletHolder.title.setText       (wallet.getTitle());
+        walletHolder.amount.setText      (wallet.getAmount() + "");
     }
 
     @Override

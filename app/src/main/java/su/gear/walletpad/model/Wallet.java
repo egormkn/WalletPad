@@ -1,5 +1,10 @@
 package su.gear.walletpad.model;
 
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Объект кошелька
  */
@@ -12,45 +17,88 @@ public class Wallet implements WalletsListItem {
         DEPOSIT,
         STOCK,
         OTHER
-    };
+    }
+
+    public static Type toType(int id) {
+        return Type.values()[id];
+    }
 
     /**
-     * Unique identification of plan
-     * It used to fetch this line from database
-     * */
-    private final long id;
+     * ID кошелька
+     */
+    private final String id;
 
     /**
-     * The main idea of plan
-     * (It will be displayed in bold)
-     * */
-    private final String title;
-
-    /**
-     * The amount that is kept in wallet
-     * This value is in Conventional Units
-     * */
-    private final double amount;
-
-    /**
-     * Type of wallet
-     * On this depends icon in a circle
-     * (And might be other features)
+     * Тип кошелька
      */
     private final Type type;
 
-    public Wallet (double amount, long id, String title, Type type) {
+    /**
+     * Валюта операции
+     */
+    private final Currency currency;
+
+    /**
+     * Сумма
+     */
+    private final double amount;
+
+    /**
+     * Название кошелька
+     */
+    private final String title;
+
+    /**
+     * Флаг отображения суммы с кошелька в общей сумме
+     */
+    private final boolean showInTotal;
+
+    /**
+     * История операций кошелька
+     */
+    private List<Operation> operations;
+
+    public Wallet(double amount, String id, Type type, Currency currency, String title, boolean showInTotal, List<Operation> operations) {
         this.amount = amount;
-        this.id     = id;
-        this.title  = (title != null && title.length () > 0)
-                        ? title
-                        : "";
-        this.type   = (type != null) ? type : Type.OTHER;
+        this.id = id;
+        this.type = type;
+        this.currency = currency;
+        this.title = title;
+        this.showInTotal = showInTotal;
+        this.operations = operations;
     }
 
-    public double amount() { return amount; }
+    public double getAmount() {
+        return amount;
+    }
 
-    public String title () { return title; }
+    public Currency getCurrency() {
+        return currency;
+    }
 
-    public Type   type  () { return type; }
+    public String getId() {
+        return id;
+    }
+
+    public List<Operation> getOperations() {
+        return operations;
+    }
+
+    public boolean isShowInTotal() {
+        return showInTotal;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        // TODO: Implement
+        return map;
+    }
 }

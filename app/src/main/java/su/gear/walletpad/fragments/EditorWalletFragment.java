@@ -17,7 +17,7 @@ import su.gear.walletpad.R;
  * Use the {@link EditorWalletFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditorWalletFragment extends Fragment implements EditorFragment {
+public class EditorWalletFragment extends EditorFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";

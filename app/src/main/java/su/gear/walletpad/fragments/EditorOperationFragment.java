@@ -2,7 +2,6 @@ package su.gear.walletpad.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,7 @@ import java.util.List;
 import su.gear.walletpad.R;
 import su.gear.walletpad.model.Operation;
 
-public class EditorOperationFragment extends Fragment implements EditorFragment {
+public class EditorOperationFragment extends EditorFragment {
 
     private EditText amountEditText, descrEditText, tagsEditText;
 
@@ -52,7 +51,7 @@ public class EditorOperationFragment extends Fragment implements EditorFragment 
         double amount = Double.parseDouble(amountText);
         List<String> tags = Arrays.asList(tagsText.split(","));
 
-        Operation operation = new Operation(1, Operation.Type.INCOME, "RUB", 1000, "Описание", "Категория", tags, new Date().getTime());
+        Operation operation = new Operation("id", Operation.Type.INCOME, "RUB", 1000, "Описание", "Категория", tags, new Date().getTime());
         Toast.makeText(getActivity(), "" + amount + " " + descrText, Toast.LENGTH_SHORT).show();
 
         FirebaseAuth auth = FirebaseAuth.getInstance();

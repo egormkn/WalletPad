@@ -82,7 +82,7 @@ public class OperationsFragment extends Fragment {
             if (i % 5 == 0) {
                 operations.add(new Separator("30 ноября 2016"));
             }
-            operations.add(new Operation(i, Operation.Type.INCOME, "RUB", 100.0, "Описание", "Category", new ArrayList<>(Arrays.asList("Buenos Aires", "Córdoba", "La Plata")), 100));
+            operations.add(new Operation("id", Operation.Type.INCOME, "RUB", 100.0, "Описание", "Category", new ArrayList<>(Arrays.asList("Buenos Aires", "Córdoba", "La Plata")), 100));
         }
     }
 

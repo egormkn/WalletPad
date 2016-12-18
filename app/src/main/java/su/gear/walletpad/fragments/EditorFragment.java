@@ -1,5 +1,7 @@
 package su.gear.walletpad.fragments;
 
-public interface EditorFragment {
-    boolean onSave();
+import android.support.v4.app.Fragment;
+
+public abstract class EditorFragment extends Fragment {
+    public abstract boolean onSave();
 }

@@ -3,7 +3,6 @@ package su.gear.walletpad.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -15,12 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.List;
 import java.util.Random;
 
@@ -38,20 +37,24 @@ import su.gear.walletpad.model.Separator;
 import su.gear.walletpad.model.Wallet;
 import su.gear.walletpad.model.WalletsListItem;
 
-public class SummaryFragment extends Fragment {
+
+public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     private DatabaseReference mFirebaseDatabaseReference;
     /*private FirebaseRecyclerAdapter<FriendlyMessage, MessageViewHolder>
             mFirebaseAdapter;*/
 
-    private List <OperationsListItem> operations;
-    private List <PlansListItem>      plans;
-    private List <WalletsListItem>    wallets;
+    private List<OperationsListItem> operations;
+    private List<PlansListItem> plans;
+    private List<WalletsListItem> wallets;
     private boolean addMenuShown = false;
 
     private TextView totalSum;
+    private FloatingActionMenu menu;
+    private long amount = 0;
 
-    public SummaryFragment() {}
+    public SummaryFragment() {
+    }
 
     public static SummaryFragment newInstance() {
         SummaryFragment fragment = new SummaryFragment();
@@ -78,29 +81,40 @@ public class SummaryFragment extends Fragment {
             }
 
 
-            operations.add(new Operation(i, Operation.Type.INCOME, "RUB", 100.0, "Описание", "Category", new ArrayList<>(Arrays.asList("Buenos Aires", "Córdoba", "La Plata")), 100));
+            operations.add(new Operation("id", Operation.Type.INCOME, "RUB", 100.0, "Описание", "Category", new ArrayList<>(Arrays.asList("Buenos Aires", "Córdoba", "La Plata")), 100));
         }
 
-        plans = new ArrayList <> ();
-        Random r = new Random ();
+        plans = new ArrayList<>();
+        Random r = new Random();
 
-        for (int i = 0; i < 30; i ++) {
-            plans.add (new Plan (i,
-                                 0,
-                                 Plan.Type.GIFT,
-                                 3 + r.nextInt (30),
-                                 "USD",
-                                 "Buy gift",
-                                 "For my darling"));
+        for (int i = 0; i < 30; i++) {
+            plans.add(new Plan(i,
+                    0,
+                    Plan.Type.GIFT,
+                    3 + r.nextInt(30),
+                    "USD",
+                    "Buy gift",
+                    "For my darling"));
         }
 
-        wallets = new ArrayList <> ();
+        wallets = new ArrayList<>();
 
-        for (int i = 0; i < 10; i ++) {
-            wallets.add (new Wallet (43 + r.nextInt (700),
-                                     i,
-                                     "Bank #" + (i + 1),
-                                     Wallet.Type.CARD));
+        for (int i = 0; i < 10; i++) {
+            wallets.add(new Wallet(43 + r.nextInt(700),
+                    "id",
+                    Wallet.Type.CARD,
+                    Currency.getInstance("RUS"),
+                    "Bank #" + (i + 1),
+                    true,
+                    null
+                    ));
+        }
+
+
+        for (WalletsListItem wallet : wallets) {
+            if (wallet instanceof Wallet) {
+                amount += ((Wallet) wallet).getAmount();
+            }
         }
 
         //operations.add(new ShowMore());
@@ -113,24 +127,18 @@ public class SummaryFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
-
-
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
         TextView summaryAmount = (TextView) view.findViewById(R.id.summary_amount);
-        summaryAmount.setText("123456 $");
+        summaryAmount.setText(String.valueOf(amount) + " $");
 
         final View overlay = view.findViewById(R.id.overlay);
-        final FloatingActionMenu menu = (FloatingActionMenu) view.findViewById(R.id.add_menu);
+        menu = (FloatingActionMenu) view.findViewById(R.id.add_menu);
         menu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
-                if (opened) {
-                    overlay.setVisibility(View.VISIBLE);
-                } else {
-                    overlay.setVisibility(View.GONE);
-                }
+                overlay.setVisibility(opened ? View.VISIBLE : View.GONE);
             }
         });
         overlay.setOnTouchListener(new View.OnTouchListener() {
@@ -144,35 +152,11 @@ public class SummaryFragment extends Fragment {
             }
         });
 
-        FloatingActionButton fab_income = (FloatingActionButton) view.findViewById(R.id.add_menu_income),
-                fab_expense = (FloatingActionButton) view.findViewById(R.id.add_menu_expense),
-                fab_transfer = (FloatingActionButton) view.findViewById(R.id.add_menu_transfer);
-
-        fab_income.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                menu.close(false);
-                Intent intent = new Intent(getActivity(), AddActivity.class);
-                intent.putExtra("type", "Income");
-                startActivity(intent);
-            }
-        });
-        fab_expense.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                menu.close(false);
-                Intent intent = new Intent(getActivity(), AddActivity.class);
-                intent.putExtra("type", "Expense");
-                startActivity(intent);
-            }
-        });
-        fab_transfer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, "Transfer", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        view.findViewById(R.id.add_menu_income).setOnClickListener(this);
+        view.findViewById(R.id.add_menu_expense).setOnClickListener(this);
+        view.findViewById(R.id.add_menu_transfer).setOnClickListener(this);
+        view.findViewById(R.id.add_menu_plan).setOnClickListener(this);
+        view.findViewById(R.id.add_menu_wallet).setOnClickListener(this);
 
         ChildrenPagesAdapter pagerAdapter = new ChildrenPagesAdapter(viewPager);
         viewPager.setAdapter(pagerAdapter);
@@ -181,28 +165,55 @@ public class SummaryFragment extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                //fab.show();
+                menu.showMenuButton(true);
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
         });
-        //viewPager.setOnPageChangeListener();
 
         RecyclerView recyclerView = (RecyclerView) pagerAdapter.findViewById(R.id.tab_summary_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new OperationsAdapter(getActivity(), operations));
 
-        RecyclerView recyclerView2 = (RecyclerView) pagerAdapter.findViewById (R.id.tab_plans_recycler);
-        recyclerView2.setLayoutManager (new LinearLayoutManager (getActivity()));
-        recyclerView2.setAdapter(new PlansAdapter (getActivity (), plans));
+        RecyclerView recyclerView2 = (RecyclerView) pagerAdapter.findViewById(R.id.tab_plans_recycler);
+        recyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView2.setAdapter(new PlansAdapter(getActivity(), plans));
 
-        RecyclerView recyclerView3 = (RecyclerView) pagerAdapter.findViewById (R.id.tab_wallets_recycler);
-        recyclerView3.setLayoutManager (new LinearLayoutManager (getActivity()));
-        recyclerView3.setAdapter(new WalletsAdapter (getActivity (), wallets));
+        RecyclerView recyclerView3 = (RecyclerView) pagerAdapter.findViewById(R.id.tab_wallets_recycler);
+        recyclerView3.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView3.setAdapter(new WalletsAdapter(getActivity(), wallets));
     }
 
+    @Override
+    public void onClick(View v) {
+        menu.close(false);
+        Intent intent = new Intent(getActivity(), AddActivity.class);
+        intent.putExtra(AddActivity.MODE_TAG, AddActivity.MODE_ADD);
+        switch (v.getId()) {
+            case R.id.add_menu_income:
+                intent.putExtra(AddActivity.TYPE_TAG, AddActivity.TYPE_INCOME);
+                break;
+            case R.id.add_menu_expense:
+                intent.putExtra(AddActivity.TYPE_TAG, AddActivity.TYPE_EXPENSE);
+                break;
+            case R.id.add_menu_transfer:
+                intent.putExtra(AddActivity.TYPE_TAG, AddActivity.TYPE_TRANSFER);
+                break;
+            case R.id.add_menu_plan:
+                intent.putExtra(AddActivity.TYPE_TAG, AddActivity.TYPE_PLAN);
+                break;
+            case R.id.add_menu_wallet:
+                intent.putExtra(AddActivity.TYPE_TAG, AddActivity.TYPE_WALLET);
+                break;
+            default:
+                throw new RuntimeException("Unknown type of item");
+        }
+        startActivity(intent);
+    }
 }

@@ -15,17 +15,19 @@ import java.util.Map;
 public class Operation implements OperationsListItem /* Parcelable */ {
 
     public enum Type {
-        INCOME, EXPENSE, TRANSFER;
+        INCOME,
+        EXPENSE,
+        TRANSFER
     }
 
-    public static Type getType(int id) {
+    public static Type toType(int id) {
         return Type.values()[id];
     }
 
     /**
      * ID операции
      */
-    private final long id;
+    private final String id;
 
     /**
      * Тип операции (доход/расход/перевод...)
@@ -62,7 +64,7 @@ public class Operation implements OperationsListItem /* Parcelable */ {
      */
     private final Date date;
 
-    public Operation(long id, Type type, String currencyCode, double amount, String description, String category, List<String> tags, long timestamp) {
+    public Operation(String id, Type type, String currencyCode, double amount, String description, String category, List<String> tags, long timestamp) {
         this.id = id;
         this.type = type;
         this.currency = Currency.getInstance(currencyCode);
@@ -73,7 +75,7 @@ public class Operation implements OperationsListItem /* Parcelable */ {
         this.date = new Date(timestamp);
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
