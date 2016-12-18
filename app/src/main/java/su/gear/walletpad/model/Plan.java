@@ -10,6 +10,19 @@ public class Plan implements PlansListItem {
         REST,     //
         TAX,      //  TODO: add more options :/
         OTHER     //
+        ;
+
+        public static Type fetchType (String type) {
+            if (type != null && type.length () > 0) {
+                type = type.toLowerCase ().trim ();
+
+                if (type.equals ("gift"))   { return GIFT; }
+                if (type.equals ("luxury")) { return LUXURY; }
+                if (type.equals ("rest"))   { return REST; }
+                if (type.equals ("tax"))    { return TAX; }
+            }
+            return OTHER;
+        }
     }
 
     /**
