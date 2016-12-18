@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".AddActivity">
+    tools:context=".EditActivity">
 
     <include layout="@layout/toolbar"/>
 
     <FrameLayout
-        android:id="@+id/add_fragment_container"
+        android:id="@+id/edit_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

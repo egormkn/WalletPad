@@ -23,7 +23,7 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Random;
 
-import su.gear.walletpad.AddActivity;
+import su.gear.walletpad.EditActivity;
 import su.gear.walletpad.R;
 import su.gear.walletpad.adapters.ChildrenPagesAdapter;
 import su.gear.walletpad.adapters.OperationsAdapter;
@@ -103,7 +103,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             wallets.add(new Wallet(43 + r.nextInt(700),
                     "id",
                     Wallet.Type.CARD,
-                    Currency.getInstance("RUS"),
+                    Currency.getInstance("RUB"),
                     "Bank #" + (i + 1),
                     true,
                     null
@@ -128,10 +128,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-
         TextView summaryAmount = (TextView) view.findViewById(R.id.summary_amount);
         summaryAmount.setText(String.valueOf(amount) + " $");
+
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+
 
         final View overlay = view.findViewById(R.id.overlay);
         menu = (FloatingActionMenu) view.findViewById(R.id.add_menu);
@@ -193,23 +194,23 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         menu.close(false);
-        Intent intent = new Intent(getActivity(), AddActivity.class);
-        intent.putExtra(AddActivity.MODE_TAG, AddActivity.MODE_ADD);
+        Intent intent = new Intent(getActivity(), EditActivity.class);
+        intent.putExtra(EditActivity.MODE_TAG, EditActivity.MODE_ADD);
         switch (v.getId()) {
             case R.id.add_menu_income:
-                intent.putExtra(AddActivity.TYPE_TAG, AddActivity.TYPE_INCOME);
+                intent.putExtra(EditActivity.TYPE_TAG, EditActivity.TYPE_INCOME);
                 break;
             case R.id.add_menu_expense:
-                intent.putExtra(AddActivity.TYPE_TAG, AddActivity.TYPE_EXPENSE);
+                intent.putExtra(EditActivity.TYPE_TAG, EditActivity.TYPE_EXPENSE);
                 break;
             case R.id.add_menu_transfer:
-                intent.putExtra(AddActivity.TYPE_TAG, AddActivity.TYPE_TRANSFER);
+                intent.putExtra(EditActivity.TYPE_TAG, EditActivity.TYPE_TRANSFER);
                 break;
             case R.id.add_menu_plan:
-                intent.putExtra(AddActivity.TYPE_TAG, AddActivity.TYPE_PLAN);
+                intent.putExtra(EditActivity.TYPE_TAG, EditActivity.TYPE_PLAN);
                 break;
             case R.id.add_menu_wallet:
-                intent.putExtra(AddActivity.TYPE_TAG, AddActivity.TYPE_WALLET);
+                intent.putExtra(EditActivity.TYPE_TAG, EditActivity.TYPE_WALLET);
                 break;
             default:
                 throw new RuntimeException("Unknown type of item");

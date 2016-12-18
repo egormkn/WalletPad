@@ -21,10 +21,10 @@ import su.gear.walletpad.fragments.EditorOperationFragment;
 import su.gear.walletpad.fragments.EditorPlanFragment;
 import su.gear.walletpad.fragments.EditorWalletFragment;
 
-public class AddActivity extends AppCompatActivity
+public class EditActivity extends AppCompatActivity
         implements MaterialSpinner.OnItemSelectedListener, View.OnClickListener {
 
-    private static final String TAG = AddActivity.class.getSimpleName();
+    private static final String TAG = EditActivity.class.getSimpleName();
 
     public static final String TYPE_TAG = "type";
     public static final String MODE_TAG = "mode";
@@ -46,7 +46,6 @@ public class AddActivity extends AppCompatActivity
     public static final int MODE_ADD = 0;
     public static final int MODE_EDIT = 1;
 
-    private List<String> menuItems = new ArrayList<>();
     private int mode = MODE_ADD;
 
     @Override
@@ -72,6 +71,7 @@ public class AddActivity extends AppCompatActivity
             bar.setDisplayShowTitleEnabled(false);
 
             // Add menu items to spinner (in order of their ids)
+            List<String> menuItems = new ArrayList<>();
             menuItems.add(getResources().getString(R.string.item_expense));
             menuItems.add(getResources().getString(R.string.item_income));
             menuItems.add(getResources().getString(R.string.item_transfer));
@@ -79,7 +79,8 @@ public class AddActivity extends AppCompatActivity
             menuItems.add(getResources().getString(R.string.item_wallet));
 
             // Set up spinner
-            MaterialSpinner spinner = (MaterialSpinner) LayoutInflater.from(bar.getThemedContext()).inflate(R.layout.toolbar_spinner, toolbar, false);
+            MaterialSpinner spinner = (MaterialSpinner) LayoutInflater.from(bar.getThemedContext())
+                    .inflate(R.layout.toolbar_spinner, toolbar, false);
             spinner.setItems(menuItems);
             spinner.setOnItemSelectedListener(this);
             spinner.setSelectedIndex(type);
@@ -88,12 +89,11 @@ public class AddActivity extends AppCompatActivity
             bar.setTitle(getResources().getString(menuRes[type]));
         }
 
-
         Fragment currentFragment = getFragment(type);
         currentFragment.setArguments(intent.getExtras());
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.add_fragment_container, currentFragment)
+                .replace(R.id.edit_fragment_container, currentFragment)
                 .commit();
     }
 
@@ -123,14 +123,14 @@ public class AddActivity extends AppCompatActivity
         args.putInt(MODE_TAG, mode);
         fragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.add_fragment_container, fragment)
+                .replace(R.id.edit_fragment_container, fragment)
                 .commit();
     }
 
     @Override
     public void onClick(View v) {
         EditorFragment currentFragment = (EditorFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.add_fragment_container);
+                .findFragmentById(R.id.edit_fragment_container);
         if (currentFragment != null && currentFragment.onSave()) {
             finish();
         }
