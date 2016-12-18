@@ -1,13 +1,33 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="su.gear.walletpad.fragments.BudgetFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.samsistemas.calendarview.widget.CalendarView
+        android:id="@+id/calendar_view"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginStart="0dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="BUDGET" />
+        android:background="@color/colorSecondary"
+        app:calendarBackgroundColor="@color/colorSecondary"
+        app:calendarTitleTextColor="@color/white"
+        app:currentDayOfMonthColor="@color/white"
+        app:dayOfWeekTextColor="@color/textColorMain"
+        app:disabledDayBackgroundColor="@color/colorSecondary"
+        app:disabledDayTextColor="@color/colorAccent"
+        app:selectedDayBackgroundColor="@color/colorAccent"
+        app:titleLayoutBackgroundColor="@color/textColorGray"
+        app:weekLayoutBackgroundColor="@color/colorSecondary"
+        app:weekendColor="#ff0000"
+        app:weekend="saturday|sunday">
+
+    </com.samsistemas.calendarview.widget.CalendarView>
 
 </FrameLayout>
