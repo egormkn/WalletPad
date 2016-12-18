@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.Currency;
+
 import su.gear.walletpad.R;
 import su.gear.walletpad.model.Wallet;
 
@@ -83,7 +85,7 @@ public class EditorWalletFragment extends EditorFragment {
         amount = amount != null && amount.length () > 0 ? amount : "0";
 
         double  amountValue = Double.parseDouble (amount);
-        long    id          = 0; //TODO: ID REQUIRED
+        String  id          = "0"; //TODO: ID REQUIRED
         boolean checked     = considerEdit.isChecked ();
 
         //New wallet initialized and ready
@@ -91,7 +93,7 @@ public class EditorWalletFragment extends EditorFragment {
         //Just do it!
         Wallet wallet = new Wallet (amountValue, id,
                                     Wallet.Type.fetchType (type),
-                                    currency, title,
+                                    Currency.getInstance (currency), title,
                                     checked, null);
 
         Toast.makeText (getActivity(), "New wallet: " + title + ", added :)", Toast.LENGTH_SHORT).show();

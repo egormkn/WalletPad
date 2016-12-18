@@ -24,6 +24,14 @@ public class Plan implements PlansListItem {
 
             return OTHER;
         }
+
+        public static Type fetchType (int index) {
+            if (index >= 0 && index < values ().length) {
+                return values () [index];
+            }
+
+            return null;
+        }
     }
 
     /**
