@@ -1,12 +1,25 @@
 package su.gear.walletpad.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.samsistemas.calendarview.decor.DayDecorator;
+import com.samsistemas.calendarview.widget.CalendarView;
+import com.samsistemas.calendarview.widget.DayView;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 import su.gear.walletpad.R;
 
@@ -66,6 +79,46 @@ public class BudgetFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_budget, container, false);
+    }
+
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated (view, savedInstanceState);
+
+        final List <Double> values = new ArrayList <> ();
+        Random random = new Random ();
+        double tinf = 0, tsup = 0;
+
+        for (int i = 0; i < 28; i ++) {
+            double value = random.nextDouble () * 1000 * (random.nextBoolean () ? 1 : -1);
+            values.add (value);
+
+            tinf = Math.min (tinf, value);
+            tsup = Math.max (tsup, value);
+        }
+
+        final double inf = tinf, sup = tsup;
+
+        CalendarView calendar = (CalendarView) view.findViewById (R.id.calendar_view);
+        calendar.setFirstDayOfWeek (Calendar.MONDAY);
+        calendar.setIsOverflowDateVisible (false);
+
+        List <DayDecorator> decorators = new ArrayList <> ();
+        decorators.add(new DayDecorator () {
+            public void decorate(DayView day) {
+                String value = day.getText ().toString ();
+                int number = Integer.parseInt (value);
+
+                if (number >= 1 && number <= values.size ()) {
+                    double amount = values.get (number - 1);
+                    if (amount < 0) { day.setBackgroundColor (Color.argb (25 + (int) (50 * amount / inf), 250, 0, 0)); }
+                    else if (amount > 0) { day.setBackgroundColor (Color.argb (25 + (int) (75 * amount / sup), 0, 250, 0)); }
+                }
+            }
+        });
+        calendar.setDecoratorsList (decorators);
+
+        calendar.refreshCalendar (Calendar.getInstance (Locale.getDefault ()));
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
