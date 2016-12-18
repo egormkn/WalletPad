@@ -1,64 +1,42 @@
 package su.gear.walletpad.fragments;
 
-import android.content.Context;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
+
 import su.gear.walletpad.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link StatisticsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link StatisticsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class StatisticsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private LineChart mLineChart;
+    private PieChart  mPieChart;
 
     public StatisticsFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StatisticsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static StatisticsFragment newInstance(String param1, String param2) {
-        StatisticsFragment fragment = new StatisticsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -68,42 +46,108 @@ public class StatisticsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_statistics, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    /*@Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }*/
-
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mLineChart = (LineChart) view.findViewById(R.id.line_chart);
+        mPieChart  = (PieChart)  view.findViewById(R.id.pie_chart);
+
+        mLineChart.setData(getLineChartData());
+        mLineChart.getDescription().setEnabled(false);
+        mLineChart.animateY(1000);
+        mLineChart.setDrawGridBackground(false);
+        Legend mLineChartLegent = mLineChart.getLegend();
+        mLineChartLegent.setEnabled(false);
+        /////////////////////////////////////////////
+        XAxis xAxis = mLineChart.getXAxis();
+        xAxis.setGranularity(1f);                   // minimum axis-step (interval) is 1
+        xAxis.setValueFormatter(formatter);
+        /////////////////////////////////////////////
+        mLineChart.invalidate();
+
+        mPieChart.setData(getPieChartData());
+        mPieChart.getDescription().setEnabled(false);
+        mPieChart.setHoleRadius(45f);
+        mPieChart.setTransparentCircleRadius(50f);
+        Legend mPieChartLegend = mPieChart.getLegend();
+        mPieChartLegend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        mPieChartLegend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        mPieChartLegend.setOrientation(Legend.LegendOrientation.VERTICAL);
+        mPieChartLegend.setDrawInside(false);
+        mPieChart.setCenterText(generateCenterPieChartText());
+        mPieChart.setCenterTextSize(6f);
+        mPieChart.invalidate();
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    private LineData getLineChartData() {
+        // x-axis
+        /*ArrayList<String> labels = new ArrayList<String>();
+        labels.add("January");
+        labels.add("February");
+        labels.add("March");
+        labels.add("April");
+        labels.add("May");
+        labels.add("June");*/
+
+        // y-axis
+        ArrayList<Entry> lineEntries = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            float val = (float) (Math.random() * 30) + 3;
+            lineEntries.add(new Entry(i, val));
+        }
+
+        LineDataSet lineDataSet = new LineDataSet(lineEntries, "Line");
+        lineDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        lineDataSet.setDrawFilled(true);
+        lineDataSet.setColor(Color.GREEN);
+        lineDataSet.setValueTextColor(Color.RED);
+
+        return new LineData(lineDataSet);
     }
+
+    private PieData getPieChartData() {
+        int count = 4;
+
+        ArrayList<String> labels = new ArrayList<String>();
+        labels.add("Trip");
+        labels.add("Food");
+        labels.add("Clothes");
+        labels.add("Fishing");
+        labels.add("Poker");
+        labels.add("Vodka");
+
+        ArrayList<PieEntry> pieEntries = new ArrayList<PieEntry>();
+
+        for(int i = 0; i < count; i++) {
+            pieEntries.add(new PieEntry((float) ((Math.random() * 60) + 40), labels.get(i)));
+        }
+
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
+        pieDataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
+        pieDataSet.setSliceSpace(2f);
+        pieDataSet.setValueTextColor(Color.WHITE);
+        pieDataSet.setValueTextSize(12f);
+
+        return new PieData(pieDataSet);
+    }
+
+    private SpannableString generateCenterPieChartText() {
+        SpannableString s = new SpannableString("Statistics\nby charge");
+        s.setSpan(new RelativeSizeSpan(2f), 0, 10, 0);
+        s.setSpan(new ForegroundColorSpan(Color.GRAY), 10, s.length(), 0);
+        return s;
+    }
+
+    final String[] quarters = new String[] { "January", "February", "March", "April", "May", "June"};
+    IAxisValueFormatter formatter = new IAxisValueFormatter() {
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            return quarters[(int) value];
+        }
+
+        // we don't draw numbers, so no decimal digits needed
+        public int getDecimalDigits() {  return 0; }
+    };
+
 }
