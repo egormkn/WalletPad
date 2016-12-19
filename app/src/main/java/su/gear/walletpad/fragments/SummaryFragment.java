@@ -97,9 +97,9 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
         for (int i = 0; i < 10; i++) {
             wallets.add(new Wallet(43 + r.nextInt(700),
-                    0,
+                    "0",
                     Wallet.Type.CARD,
-                    "RUB",
+                    Currency.getInstance ("RUB"),
                     "Bank #" + (i + 1),
                     true,
                     null
