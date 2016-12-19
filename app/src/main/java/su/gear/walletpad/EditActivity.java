@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
@@ -35,6 +37,9 @@ public class EditActivity extends AppCompatActivity
     public static final int TYPE_PLAN = 3;
     public static final int TYPE_WALLET = 4;
 
+    public static final int MODE_ADD = 0;
+    public static final int MODE_EDIT = 1;
+
     private static final int[] menuRes = {
             R.string.item_expense,
             R.string.item_income,
@@ -43,19 +48,43 @@ public class EditActivity extends AppCompatActivity
             R.string.item_wallet
     };
 
-    public static final int MODE_ADD = 0;
-    public static final int MODE_EDIT = 1;
-
+    private FirebaseUser user;
     private int mode = MODE_ADD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Intent intent = new Intent(this, AuthActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_edit);
 
         Intent intent = getIntent();
         int type = intent.getIntExtra(TYPE_TAG, 0);
         mode = intent.getIntExtra(MODE_TAG, MODE_ADD);
+
+
+        String action = intent.getAction();
+        String mimetype = intent.getType ();
+
+        if (Intent.ACTION_SEND.equals(action) && mimetype != null) {
+            if ("text/plain".equals (mimetype)) {
+                String sharedText = intent.getStringExtra (Intent.EXTRA_TEXT);
+                if (sharedText != null && sharedText.length () > 0) {
+                    //((TextView) findViewById (R.id.share_text)).setText ("Link: " + sharedText);
+                } else {
+                    //((TextView) findViewById (R.id.share_text)).setText ("Empty shared text ...");
+                }
+            }
+        }
+
 
         // Set up toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,10 +16,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
 import java.util.Random;
@@ -33,13 +38,13 @@ import su.gear.walletpad.model.Operation;
 import su.gear.walletpad.model.OperationsListItem;
 import su.gear.walletpad.model.Plan;
 import su.gear.walletpad.model.PlansListItem;
-import su.gear.walletpad.model.Separator;
 import su.gear.walletpad.model.Wallet;
 import su.gear.walletpad.model.WalletsListItem;
 
 
 public class SummaryFragment extends Fragment implements View.OnClickListener {
 
+    private static final String TAG = SummaryFragment.class.getSimpleName();
     private DatabaseReference mFirebaseDatabaseReference;
     /*private FirebaseRecyclerAdapter<FriendlyMessage, MessageViewHolder>
             mFirebaseAdapter;*/
@@ -47,42 +52,33 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     private List<OperationsListItem> operations;
     private List<PlansListItem> plans;
     private List<WalletsListItem> wallets;
-    private boolean addMenuShown = false;
 
     private TextView totalSum;
     private FloatingActionMenu menu;
     private long amount = 0;
 
-    public SummaryFragment() {
-    }
-
-    public static SummaryFragment newInstance() {
-        SummaryFragment fragment = new SummaryFragment();
-        /*Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);*/
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
-
         operations = new ArrayList<>();
 
-        for (int i = 0; i < 20; i++) {
+        /*for (int i = 0; i < 20; i++) {
             if (i % 5 == 0) {
                 operations.add(new Separator("30 ноября 2016"));
             }
 
+            operations.add(new Operation(
+                    100.0,
+                    "id",
+                    Operation.Type.INCOME,
+                    new Date(),
+                    Currency.getInstance("RUB"),
+                    "Wallet",
+                    "Description",
+                    "Category",
+                    new ArrayList<>(Arrays.asList("Buenos Aires", "Córdoba", "La Plata"))));
 
-            operations.add(new Operation("id", Operation.Type.INCOME, "RUB", 100.0, "Описание", "Category", new ArrayList<>(Arrays.asList("Buenos Aires", "Córdoba", "La Plata")), 100));
-        }
+        }*/
 
         plans = new ArrayList<>();
         Random r = new Random();
@@ -107,7 +103,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                     "Bank #" + (i + 1),
                     true,
                     null
-                    ));
+            ));
         }
 
 
@@ -117,7 +113,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             }
         }
 
-        //operations.add(new ShowMore());
+        //operations.add(new RecyclerButton());
         setHasOptionsMenu(true);
     }
 
@@ -163,24 +159,12 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         viewPager.setAdapter(pagerAdapter);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                menu.showMenuButton(true);
-            }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
-        });
-
+        final OperationsAdapter operationsAdapter = new OperationsAdapter(getActivity(), operations);
         RecyclerView recyclerView = (RecyclerView) pagerAdapter.findViewById(R.id.tab_summary_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new OperationsAdapter(getActivity(), operations));
+        recyclerView.setAdapter(operationsAdapter);
 
         RecyclerView recyclerView2 = (RecyclerView) pagerAdapter.findViewById(R.id.tab_plans_recycler);
         recyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -189,6 +173,32 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         RecyclerView recyclerView3 = (RecyclerView) pagerAdapter.findViewById(R.id.tab_wallets_recycler);
         recyclerView3.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView3.setAdapter(new WalletsAdapter(getActivity(), wallets));
+
+        DatabaseReference newRef = FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("operations");
+
+
+        newRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                operations.clear();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    operations.add(new Operation(postSnapshot));
+                    //postSnapshot.
+                    // TODO: handle the post
+                }
+                operationsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });
     }
 
     @Override

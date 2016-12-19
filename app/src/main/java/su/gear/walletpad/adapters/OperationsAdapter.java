@@ -14,6 +14,7 @@ import java.util.List;
 import su.gear.walletpad.R;
 import su.gear.walletpad.model.Operation;
 import su.gear.walletpad.model.OperationsListItem;
+import su.gear.walletpad.model.RecyclerButton;
 import su.gear.walletpad.model.Separator;
 import su.gear.walletpad.utils.IOUtils;
 import su.gear.walletpad.views.IconView;
@@ -21,8 +22,8 @@ import su.gear.walletpad.views.IconView;
 public class OperationsAdapter extends RecyclerView.Adapter {
 
     private final int ITEM_OPERATION = R.layout.item_operation;
-    private final int ITEM_DATE = R.layout.item_separator;
-    private final int ITEM_MORE = R.layout.item_separator;
+    private final int ITEM_SEPARATOR = R.layout.item_separator;
+    private final int ITEM_BUTTON = R.layout.item_recyclerbutton;
 
     private final LayoutInflater layoutInflater;
     private final List<OperationsListItem> operations;
@@ -36,7 +37,16 @@ public class OperationsAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return operations.get(position) instanceof Operation ? ITEM_OPERATION : ITEM_DATE;
+        OperationsListItem item = operations.get(position);
+        if (item instanceof Operation) {
+            return ITEM_OPERATION;
+        } else if (item instanceof Separator) {
+            return ITEM_SEPARATOR;
+        } else if (item instanceof RecyclerButton) {
+            return ITEM_BUTTON;
+        } else {
+            throw new IllegalArgumentException("Unknown type of item");
+        }
     }
 
     @Override
@@ -44,8 +54,10 @@ public class OperationsAdapter extends RecyclerView.Adapter {
         switch (viewType) {
             case ITEM_OPERATION:
                 return OperationViewHolder.newInstance(layoutInflater, parent);
-            case ITEM_DATE:
+            case ITEM_SEPARATOR:
                 return DateViewHolder.newInstance(layoutInflater, parent);
+            case ITEM_BUTTON:
+                //return ButtonViewHolder.newInstance(layoutInflater, parent);
             default:
                 throw new IllegalArgumentException("Unknown View type: " + viewType);
         }
@@ -133,5 +145,8 @@ public class OperationsAdapter extends RecyclerView.Adapter {
             final View view = layoutInflater.inflate(R.layout.item_separator, parent, false);
             return new DateViewHolder(view);
         }
+    }
+
+    private class ButtonViewHolder {
     }
 }
