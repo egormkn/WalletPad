@@ -81,6 +81,21 @@
         <item>ZAR</item>
     </string-array>
 
+    <string-array name="plans_type">
+        <item>GIFT</item>
+        <item>LUXURY</item>
+        <item>REST</item>
+        <item>TAX</item>
+        <item>OTHER</item>
+    </string-array>
+
+    <string-array name="wallets_type">
+        <item>CARD</item>
+        <item>CASH</item>
+        <item>DEPOSIT</item>
+        <item>STOCK</item>
+        <item>OTHER</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="logout">Logout</string>
