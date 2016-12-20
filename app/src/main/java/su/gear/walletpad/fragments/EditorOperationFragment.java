@@ -2,6 +2,7 @@ package su.gear.walletpad.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +25,10 @@ import su.gear.walletpad.model.Operation;
 
 public class EditorOperationFragment extends EditorFragment {
 
+    private TextInputLayout amountLayout, descrLayout;
     private EditText amountEditText, descrEditText, tagsEditText;
     private MaterialSpinner currencySpinner, categorySpinner;
-
     private List<String> currencies, categories;
-
-
-
-    // Required empty public constructor
-    public EditorOperationFragment() {
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,11 +39,11 @@ public class EditorOperationFragment extends EditorFragment {
         currencies.add("EUR");
 
         categories = new ArrayList<>();
-        categories.add("Дом");
-        categories.add("Еда");
-        categories.add("Транспорт");
-        categories.add("Медицина");
-        categories.add("Интернет");
+        categories.add("Home");
+        categories.add("Food");
+        categories.add("Transport");
+        categories.add("Medicine");
+        categories.add("Internet");
     }
 
     @Override
@@ -61,7 +56,9 @@ public class EditorOperationFragment extends EditorFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        amountLayout = (TextInputLayout) view.findViewById(R.id.edit_operation_amount_holder);
         amountEditText = (EditText) view.findViewById(R.id.edit_operation_amount);
+        descrLayout = (TextInputLayout) view.findViewById(R.id.edit_operation_descr_holder);
         descrEditText = (EditText) view.findViewById(R.id.edit_operation_descr);
         tagsEditText = (EditText) view.findViewById(R.id.edit_operation_tags);
         currencySpinner = (MaterialSpinner) view.findViewById(R.id.edit_operation_currency);
@@ -71,23 +68,35 @@ public class EditorOperationFragment extends EditorFragment {
         categorySpinner.setItems(categories);
         //spinner.setOnItemSelectedListener(this);
         //spinner.setSelectedIndex(type);
+
     }
 
     @Override
     public boolean onSave() {
         String amountText = amountEditText.getText().toString();
-        String descrText = descrEditText.getText().toString();
-        String tagsText = tagsEditText.getText().toString();
-        String currency = currencies.get(currencySpinner.getSelectedIndex());
-        String category = categories.get(categorySpinner.getSelectedIndex());
-
         double amount = 0.0;
         try {
             amount = Double.parseDouble(amountText);
+            amountLayout.setErrorEnabled(false);
         } catch (Exception e) {
             Toast.makeText(getActivity(), "Please, specify a valid amount", Toast.LENGTH_SHORT).show();
+            amountLayout.setError("Please, specify a valid amount");
+            amountLayout.setErrorEnabled(true);
             return false;
         }
+
+        String descrText = descrEditText.getText().toString();
+        if (descrText.length() == 0) {
+            descrLayout.setError("Please, fill the description");
+            descrLayout.setErrorEnabled(true);
+            return false;
+        } else {
+            descrLayout.setErrorEnabled(false);
+        }
+
+        String tagsText = tagsEditText.getText().toString();
+        String currency = currencies.get(currencySpinner.getSelectedIndex());
+        String category = categories.get(categorySpinner.getSelectedIndex());
 
         List<String> tags = Arrays.asList(tagsText.split(","));
 
@@ -102,17 +111,16 @@ public class EditorOperationFragment extends EditorFragment {
                 .child("operations").push();
 
         Operation operation = new Operation(
-                100.0,
+                amount,
                 newRef.getKey(),
                 Operation.Type.INCOME,
                 new Date(),
-                Currency.getInstance("RUB"),
+                Currency.getInstance(currency),
                 "Wallet",
-                "My operation somewhere",
-                "Category",
-                new ArrayList<>(Arrays.asList("Food", "Restaurants")));
+                descrText,
+                category,
+                tags);
 
-        /*Operation operation = new Operation(newRef.getKey(), Operation.Type.INCOME, currency, amount, descrText, category, tags, new Date().getTime());*/
         newRef.setValue(operation.toMap());
         return true;
     }

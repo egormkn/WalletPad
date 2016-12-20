@@ -12,14 +12,23 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:minHeight="150dp">
 
         <TextView
+            android:id="@+id/tab_summary_error"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:gravity="center"
             android:text="No data available"
             android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/tab_summary_progress"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/tab_summary_recycler"
@@ -27,7 +36,8 @@
             android:layout_height="match_parent"
             android:nestedScrollingEnabled="false"
             android:scrollbars="vertical"
-            tools:targetApi="lollipop" />
+            tools:targetApi="lollipop"
+            android:visibility="gone" />
 
     </FrameLayout>
 </android.support.v4.widget.NestedScrollView>

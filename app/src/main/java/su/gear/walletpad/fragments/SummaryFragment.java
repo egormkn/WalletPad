@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionMenu;
@@ -45,15 +46,24 @@ import su.gear.walletpad.model.WalletsListItem;
 public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = SummaryFragment.class.getSimpleName();
-    private DatabaseReference mFirebaseDatabaseReference;
-    /*private FirebaseRecyclerAdapter<FriendlyMessage, MessageViewHolder>
-            mFirebaseAdapter;*/
 
     private List<OperationsListItem> operations;
     private List<PlansListItem> plans;
     private List<WalletsListItem> wallets;
 
-    private TextView totalSum;
+    private TextView tabSummaryError;
+    private ProgressBar tabSummaryProgress;
+    private RecyclerView tabSummaryRecycler;
+
+    private TextView tabWalletsError;
+    private ProgressBar tabWalletsProgress;
+    private RecyclerView tabWalletsRecycler;
+
+    private TextView tabPlansError;
+    private ProgressBar tabPlansProgress;
+    private RecyclerView tabPlansRecycler;
+
+    private TextView totalAmount;
     private FloatingActionMenu menu;
     private long amount = 0;
 
@@ -160,11 +170,13 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
 
+        tabSummaryError = (TextView) pagerAdapter.findViewById(R.id.tab_summary_error);
+        tabSummaryProgress = (ProgressBar) pagerAdapter.findViewById(R.id.tab_summary_progress);
+        tabSummaryRecycler = (RecyclerView) pagerAdapter.findViewById(R.id.tab_summary_recycler);
 
         final OperationsAdapter operationsAdapter = new OperationsAdapter(getActivity(), operations);
-        RecyclerView recyclerView = (RecyclerView) pagerAdapter.findViewById(R.id.tab_summary_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(operationsAdapter);
+        tabSummaryRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        tabSummaryRecycler.setAdapter(operationsAdapter);
 
         RecyclerView recyclerView2 = (RecyclerView) pagerAdapter.findViewById(R.id.tab_plans_recycler);
         recyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -174,22 +186,29 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         recyclerView3.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView3.setAdapter(new WalletsAdapter(getActivity(), wallets));
 
-        DatabaseReference newRef = FirebaseDatabase.getInstance()
+        DatabaseReference operationsReference = FirebaseDatabase.getInstance()
                 .getReference("users")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("operations");
 
-
-        newRef.addValueEventListener(new ValueEventListener() {
+        operationsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 operations.clear();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     operations.add(new Operation(postSnapshot));
-                    //postSnapshot.
-                    // TODO: handle the post
                 }
                 operationsAdapter.notifyDataSetChanged();
+                if (operations.size() > 0) {
+                    tabSummaryProgress.setVisibility(View.GONE);
+                    tabSummaryError.setVisibility(View.GONE);
+                    tabSummaryRecycler.setVisibility(View.VISIBLE);
+                } else {
+                    tabSummaryProgress.setVisibility(View.GONE);
+                    tabSummaryError.setVisibility(View.VISIBLE);
+                    tabSummaryError.setText("Operations not found");
+                    tabSummaryRecycler.setVisibility(View.GONE);
+                }
             }
 
             @Override

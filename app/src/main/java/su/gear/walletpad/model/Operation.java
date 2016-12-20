@@ -1,7 +1,5 @@
 package su.gear.walletpad.model;
 
-import android.util.Log;
-
 import com.google.firebase.database.DataSnapshot;
 
 import java.text.ParseException;
@@ -31,9 +29,7 @@ public class Operation implements OperationsListItem {
     private final List<String> tags;  // Теги операции
 
     public Operation(DataSnapshot snapshot) {
-        // double amount, String id, Type type, Date date, Currency currency, String wallet, String description, String category, List<String> tags
-        Log.e("******", "" + snapshot.child(TAG_AMOUNT).getValue());
-        this.amount = (Long) snapshot.child(TAG_AMOUNT).getValue();
+        this.amount = Double.parseDouble((String) snapshot.child(TAG_AMOUNT).getValue());
         this.id = snapshot.getKey();
         this.type = Type.valueOf((String) snapshot.child(TAG_TYPE).getValue());
         Date date;
@@ -102,7 +98,7 @@ public class Operation implements OperationsListItem {
         Map<String, Object> map = new HashMap<>();
         map.put(TAG_TYPE, type.toString());
         map.put(TAG_DATE, dateFormat.format(date));
-        map.put(TAG_AMOUNT, amount);
+        map.put(TAG_AMOUNT, String.valueOf(amount));
         map.put(TAG_CURRENCY, currency.getCurrencyCode());
         map.put(TAG_WALLET, wallet);
         map.put(TAG_DESCRIPTION, description);
