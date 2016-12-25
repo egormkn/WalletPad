@@ -2,6 +2,7 @@ package su.gear.walletpad;
 
 import android.app.Application;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.leakcanary.LeakCanary;
 
 public class WalletPadApplication extends Application {
@@ -13,6 +14,7 @@ public class WalletPadApplication extends Application {
             return;
         }
         LeakCanary.install(this);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         // FireBase Crash Reporting
         /*Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler(){
             @Override

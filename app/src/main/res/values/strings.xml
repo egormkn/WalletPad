@@ -96,6 +96,35 @@
         <item>STOCK</item>
         <item>OTHER</item>
     </string-array>
+
+
+    <string-array name="months">
+        <item>января</item>
+        <item>февраля</item>
+        <item>марта</item>
+        <item>апреля</item>
+        <item>мая</item>
+        <item>июня</item>
+        <item>июля</item>
+        <item>августа</item>
+        <item>сентября</item>
+        <item>октября</item>
+        <item>ноября</item>
+        <item>декабря</item>
+    </string-array>
+
+    <string name="category_expense_food">Food</string>
+    <string name="category_expense_clothes">Clothes</string>
+    <string name="category_expense_house">House</string>
+    <string name="category_expense_medicine">Medicine</string>
+    <string name="category_expense_transport">Transport</string>
+    <string name="category_expense_education">Education</string>
+    <string name="category_expense_entertainment">Entertainment</string>
+    <string name="category_expense_work">Work</string>
+    <string name="category_expense_internet">Internet</string>
+    <string name="category_expense_gifts">Gifts</string>
+    <string name="category_expense_other">Other</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="logout">Logout</string>

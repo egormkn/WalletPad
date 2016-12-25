@@ -62,6 +62,10 @@ public class AuthActivity extends AppCompatActivity
                 .build();
 
         auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            onSignedIn();
+            return;
+        }
 
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override

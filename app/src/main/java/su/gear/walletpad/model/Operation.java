@@ -1,5 +1,9 @@
 package su.gear.walletpad.model;
 
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
+
 import com.google.firebase.database.DataSnapshot;
 
 import java.text.ParseException;
@@ -11,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import su.gear.walletpad.R;
 
 /**
  * Объект операции (доход/расход/перевод...)
@@ -116,21 +122,37 @@ public class Operation implements OperationsListItem {
     private static final String TAG_CATEGORY = "category";
     private static final String TAG_TAGS = "tags";
 
-    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd.HHmmss", Locale.US);
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd.HHmmss", Locale.US);
 
     public enum Type {
         INCOME,
         EXPENSE,
-        TRANSFER;
+        TRANSFER
     }
 
     public static Type toType(int id) {
         return Type.values()[id];
     }
 
-    public class Category {
-        public Category() {
+    public enum Category {
 
+        CLOTHES(R.string.category_expense_clothes, R.drawable.category_expense_clothes, R.color.colorAccent);
+
+        @StringRes
+        private final int title;
+
+        @DrawableRes
+        private final int icon;
+
+        @ColorRes
+        private final int color;
+
+        Category(int title, int icon, int color) {
+            this.title = title;
+            this.icon = icon;
+            this.color = color;
         }
+
+
     }
 }

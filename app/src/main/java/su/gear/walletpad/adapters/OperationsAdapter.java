@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -57,7 +58,7 @@ public class OperationsAdapter extends RecyclerView.Adapter {
             case ITEM_SEPARATOR:
                 return DateViewHolder.newInstance(layoutInflater, parent);
             case ITEM_BUTTON:
-                //return ButtonViewHolder.newInstance(layoutInflater, parent);
+                return ButtonViewHolder.newInstance(layoutInflater, parent);
             default:
                 throw new IllegalArgumentException("Unknown View type: " + viewType);
         }
@@ -147,6 +148,18 @@ public class OperationsAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private class ButtonViewHolder {
+    private static class ButtonViewHolder extends RecyclerView.ViewHolder {
+
+        private final Button button;
+
+        private ButtonViewHolder(View itemView) {
+            super(itemView);
+            button = (Button) itemView.findViewById(R.id.recycler_button);
+        }
+
+        static ButtonViewHolder newInstance(LayoutInflater layoutInflater, ViewGroup parent) {
+            final View view = layoutInflater.inflate(R.layout.item_recyclerbutton, parent, false);
+            return new ButtonViewHolder(view);
+        }
     }
 }

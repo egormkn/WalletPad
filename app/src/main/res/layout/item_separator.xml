@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/recyclerview_item_margin"
         android:layout_marginRight="@dimen/recyclerview_item_margin"
-        android:layout_marginTop="@dimen/recyclerview_item_margin"
+        android:layout_marginTop="8dp"
         android:textAllCaps="true"
         android:textColor="@color/colorAccent"
         android:textStyle="bold"

@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
@@ -39,8 +40,11 @@ import su.gear.walletpad.model.Operation;
 import su.gear.walletpad.model.OperationsListItem;
 import su.gear.walletpad.model.Plan;
 import su.gear.walletpad.model.PlansListItem;
+import su.gear.walletpad.model.RecyclerButton;
+import su.gear.walletpad.model.Separator;
 import su.gear.walletpad.model.Wallet;
 import su.gear.walletpad.model.WalletsListItem;
+import su.gear.walletpad.utils.DateUtils;
 
 
 public class SummaryFragment extends Fragment implements View.OnClickListener {
@@ -66,6 +70,9 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     private TextView totalAmount;
     private FloatingActionMenu menu;
     private long amount = 0;
+
+    private ValueEventListener listener;
+    private DatabaseReference operationsReference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -186,18 +193,27 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         recyclerView3.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView3.setAdapter(new WalletsAdapter(getActivity(), wallets));
 
-        DatabaseReference operationsReference = FirebaseDatabase.getInstance()
+        operationsReference = FirebaseDatabase.getInstance()
                 .getReference("users")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("operations");
 
-        operationsReference.addValueEventListener(new ValueEventListener() {
+        listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 operations.clear();
+                String lastDate = "";
+                SimpleDateFormat dateFormat = DateUtils.getDateFormat(getContext());
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    operations.add(new Operation(postSnapshot));
+                    Operation operation = new Operation(postSnapshot);
+                    String operationDate = dateFormat.format(operation.getDate());
+                    if (!operationDate.equals(lastDate)) {
+                        lastDate = operationDate;
+                        operations.add(new Separator(operationDate));
+                    }
+                    operations.add(operation);
                 }
+                operations.add(new RecyclerButton("Show all"));
                 operationsAdapter.notifyDataSetChanged();
                 if (operations.size() > 0) {
                     tabSummaryProgress.setVisibility(View.GONE);
@@ -217,7 +233,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
                 // ...
             }
-        });
+        };
     }
 
     @Override
@@ -245,5 +261,17 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 throw new RuntimeException("Unknown type of item");
         }
         startActivity(intent);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        operationsReference.addValueEventListener(listener);
+    }
+
+    @Override
+    public void onStop() {
+        operationsReference.removeEventListener(listener);
+        super.onStop();
     }
 }
