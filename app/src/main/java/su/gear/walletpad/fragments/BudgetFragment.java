@@ -98,7 +98,7 @@ public class BudgetFragment extends Fragment {
 
         final double inf = tinf, sup = tsup;
 
-        CalendarView calendar = (CalendarView) view.findViewById (R.id.calendar_view);
+        final CalendarView calendar = (CalendarView) view.findViewById (R.id.calendar_view);
         calendar.setFirstDayOfWeek (Calendar.MONDAY);
         calendar.setIsOverflowDateVisible (false);
 
@@ -110,15 +110,20 @@ public class BudgetFragment extends Fragment {
 
                 if (number >= 1 && number <= values.size ()) {
                     double amount = values.get (number - 1);
-                    if (amount < 0) { day.setBackgroundColor (Color.argb (25 + (int) (50 * amount / inf), 250, 0, 0)); }
+                    if (amount < 0)      { day.setBackgroundColor (Color.argb (25 + (int) (50 * amount / inf), 250, 0, 0)); }
                     else if (amount > 0) { day.setBackgroundColor (Color.argb (25 + (int) (75 * amount / sup), 0, 250, 0)); }
                 }
+
+                day.setOnClickListener(new View.OnClickListener() {
+                    public void onClick (View v) {
+                        calendar.refreshCalendar (Calendar.getInstance (Locale.getDefault ()));
+                    }
+                });
             }
         });
         calendar.setDecoratorsList (decorators);
 
         calendar.refreshCalendar (Calendar.getInstance (Locale.getDefault ()));
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
