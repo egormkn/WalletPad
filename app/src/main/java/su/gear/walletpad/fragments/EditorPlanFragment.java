@@ -11,6 +11,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Currency;
+
 import su.gear.walletpad.R;
 import su.gear.walletpad.model.Plan;
 
@@ -81,18 +89,40 @@ public class EditorPlanFragment extends EditorFragment {
         String title  = titleEdit.getText  ().toString ();
         String desc   = descEdit.getText   ().toString ();
 
+        if (title == null || title.length () < 1) {
+            Toast.makeText (getActivity (),
+                            "Please, enter a title",
+                            Toast.LENGTH_SHORT).show ();
+            return false;
+        }
+
         double amountValue = Double.parseDouble (amount);
         long   id          = 0; //TODO: ID REQUIRED
         long   time        = System.currentTimeMillis ();
+
+        Currency  currencyISO = Currency.getInstance (currency);
+        Plan.Type typeValue   = Plan.Type.fetchType (type);
+
+        FirebaseAuth auth = FirebaseAuth.getInstance ();
+        if (auth == null || auth.getCurrentUser () == null) { return false; }
+
+        FirebaseDatabase db   = FirebaseDatabase.getInstance ();
+        FirebaseUser     user = auth.getCurrentUser();
+
+        DatabaseReference reference = db.getReference ("users")
+                                        .child (user.getUid ())
+                                        .child ("plans").push ();
 
         //New plan initialized and ready
         //to be written into database
         //Just do it!
         Plan plan = new Plan (id, time,
-                              Plan.Type.fetchType (type),
+                              typeValue,
                               amountValue,
-                              currency,
+                              currencyISO,
                               title, desc);
+
+        reference.setValue (plan.toMap ());
 
         Toast.makeText (getActivity(), "New plan: " + title + ", added :)", Toast.LENGTH_SHORT).show();
 

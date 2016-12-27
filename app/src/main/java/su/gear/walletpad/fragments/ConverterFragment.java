@@ -28,7 +28,6 @@ public class ConverterFragment extends Fragment {
 
     private String fromCur, toCur;
     private String amountCur;
-    private String resultCur;
 
     private boolean converting = false;
 

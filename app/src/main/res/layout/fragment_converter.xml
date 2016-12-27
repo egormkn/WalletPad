@@ -75,10 +75,10 @@
                 android:id="@+id/amountCUR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:layout_weight="0.75"
                 android:textAlignment="center"
-                android:text="2000"
+                android:text="0"
                 />
 
             <Spinner

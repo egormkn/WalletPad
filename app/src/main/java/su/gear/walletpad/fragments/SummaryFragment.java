@@ -101,11 +101,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         Random r = new Random();
 
         for (int i = 0; i < 30; i++) {
-            plans.add(new Plan(i,
+            plans.add (new Plan (i,
                     0,
                     Plan.Type.GIFT,
                     3 + r.nextInt(30),
-                    "USD",
+                    Currency.getInstance ("USD"),
                     "Buy gift",
                     "For my darling"));
         }
