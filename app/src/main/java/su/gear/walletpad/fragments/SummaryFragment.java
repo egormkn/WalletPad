@@ -119,7 +119,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
         wallets = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        /*for (int i = 0; i < 10; i++) {
             wallets.add(new Wallet(43 + r.nextInt(700),
                     "0",
                     Wallet.Type.CARD,
@@ -128,7 +128,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                     true,
                     null
             ));
-        }
+        }*/
 
 
         for (WalletsListItem wallet : wallets) {
@@ -200,9 +200,13 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         tabPlansRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         tabPlansRecycler.setAdapter(plansAdapter);
 
-        RecyclerView recyclerView3 = (RecyclerView) pagerAdapter.findViewById(R.id.tab_wallets_recycler);
-        recyclerView3.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView3.setAdapter(new WalletsAdapter(getActivity(), wallets));
+        tabWalletsError = (TextView) pagerAdapter.findViewById (R.id.tab_wallets_error);
+        tabWalletsProgress = (ProgressBar) pagerAdapter.findViewById (R.id.tab_wallets_progress);
+        tabWalletsRecycler = (RecyclerView) pagerAdapter.findViewById (R.id.tab_wallets_recycler);
+
+        final WalletsAdapter walletsAdapter = new WalletsAdapter (getActivity (), wallets);
+        tabWalletsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        tabWalletsRecycler.setAdapter(walletsAdapter);
 
         operationsReference = FirebaseDatabase.getInstance()
                 .getReference("users")
@@ -281,6 +285,41 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 // ...
             }
         };
+
+        walletsReference = FirebaseDatabase.getInstance ()
+                                           .getReference ("users")
+                                           .child (user.getUid ())
+                                           .child ("wallets");
+
+        walletsListener = new ValueEventListener () {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                wallets.clear ();
+
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Wallet wallet = new Wallet (postSnapshot);
+                    wallets.add (wallet);
+                }
+
+                walletsAdapter.notifyDataSetChanged ();
+
+                if (wallets.size() > 0) {
+                    tabWalletsProgress.setVisibility (View.GONE);
+                    tabWalletsError.setVisibility    (View.GONE);
+                    tabWalletsRecycler.setVisibility (View.VISIBLE);
+                } else {
+                    tabWalletsProgress.setVisibility (View.GONE);
+                    tabWalletsError.setVisibility    (View.VISIBLE);
+                    tabWalletsError.setText          ("Wallets not found");
+                    tabWalletsRecycler.setVisibility (View.GONE);
+                }
+            }
+
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
     }
 
     @Override
@@ -315,12 +354,14 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         super.onStart();
         operationsReference.addValueEventListener(summaryListener);
         plansReference.addValueEventListener (plansListener);
+        walletsReference.addValueEventListener (walletsListener);
     }
 
     @Override
     public void onStop() {
         operationsReference.removeEventListener(summaryListener);
         plansReference.removeEventListener (plansListener);
+        walletsReference.removeEventListener (walletsListener);
         super.onStop();
     }
 }

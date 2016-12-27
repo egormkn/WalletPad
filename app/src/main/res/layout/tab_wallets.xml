@@ -13,11 +13,18 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/tab_wallets_error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="No data available"
             android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/tab_wallets_progress"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/tab_wallets_recycler"
