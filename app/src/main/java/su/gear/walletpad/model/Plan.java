@@ -1,5 +1,9 @@
 package su.gear.walletpad.model;
 
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.Map;
+
 import su.gear.walletpad.R;
 
 public class Plan implements PlansListItem {
@@ -62,7 +66,7 @@ public class Plan implements PlansListItem {
      * In what currency converted amount
      * for this plan that given above
      * */
-    private final String currency;
+    private final Currency currency;
 
     /**
      * The main idea of plan
@@ -80,7 +84,7 @@ public class Plan implements PlansListItem {
                  long time,
                  Type type,
                  double amount,
-                 String currency,
+                 Currency currency,
                  String title,
                  String description) {
 
@@ -88,9 +92,9 @@ public class Plan implements PlansListItem {
         this.timestamp   = time;
         this.amount      = amount;
         this.type        = type == null ? Type.OTHER : type;
-        this.currency    = (currency != null && currency.length () > 0)
+        this.currency    = (currency != null)
                                 ? currency
-                                : /*R.string.default_currency*/ "RUB";
+                                : Currency.getInstance ("RUB");
         this.title       = (title != null && title.length () > 0)
                                 ? title
                                 : "";
@@ -101,8 +105,20 @@ public class Plan implements PlansListItem {
 
     /* GETS */
 
+    public Map <String, Object> toMap () {
+        Map <String, Object> result = new HashMap <> ();
+        result.put ("time",        timestamp);
+        result.put ("amount",      amount);
+        result.put ("type",        type);
+        result.put ("currency",    currency.toString ());
+        result.put ("title",       title);
+        result.put ("description", description);
+
+        return result;
+    }
+
     public double amount      () { return amount; }
-    public String currency    () { return currency; }
+    public Currency currency  () { return currency; }
     public String description () { return description; }
 
     public long   id          () { return id; }
