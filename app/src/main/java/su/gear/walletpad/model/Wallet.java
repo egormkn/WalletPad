@@ -125,9 +125,14 @@ public class Wallet implements WalletsListItem {
         return type;
     }
 
-    public Map<String, Object> toMap() {
-        Map<String, Object> map = new HashMap<>();
-        // TODO: Implement
-        return map;
+    public Map <String, Object> toMap () {
+        Map <String, Object> result = new HashMap <> ();
+        result.put ("amount",      amount + "");
+        result.put ("type",        type);
+        result.put ("currency",    currency.toString ());
+        result.put ("title",       title);
+        result.put ("intotal",     showInTotal + "");
+
+        return result;
     }
 }
