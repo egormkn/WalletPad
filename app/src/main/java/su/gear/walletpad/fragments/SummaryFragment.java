@@ -78,6 +78,9 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     private ValueEventListener plansListener;
     private DatabaseReference plansReference;
 
+    private ValueEventListener walletsListener;
+    private DatabaseReference walletsReference;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

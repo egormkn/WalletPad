@@ -113,7 +113,7 @@ public class BudgetFragment extends Fragment {
                 .child (user.getUid ())
                 .child ("operations");
 
-        dateFormat = new SimpleDateFormat ("yyyyMMdd.HHmmss", Locale.getDefault ());
+        dateFormat = new SimpleDateFormat ("yyyyMMdd.HHmmss", Locale.US);
         storage    = new HashMap <> ();
 
         valueListener = new ValueEventListener () {
@@ -221,7 +221,7 @@ public class BudgetFragment extends Fragment {
         });
 
         calendar.setDecoratorsList (decorators);
-        SimpleDateFormat date = new SimpleDateFormat ("yyyyMM", Locale.getDefault ());
+        SimpleDateFormat date = new SimpleDateFormat ("yyyyMM", Locale.US);
         Calendar currentMonth = Calendar.getInstance ();
 
         try {
