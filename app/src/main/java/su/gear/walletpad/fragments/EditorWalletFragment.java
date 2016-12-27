@@ -12,6 +12,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Currency;
 
 import su.gear.walletpad.R;
@@ -88,6 +93,16 @@ public class EditorWalletFragment extends EditorFragment {
         String  id          = "0"; //TODO: ID REQUIRED
         boolean checked     = considerEdit.isChecked ();
 
+        FirebaseAuth auth = FirebaseAuth.getInstance ();
+        if (auth == null || auth.getCurrentUser () == null) { return false; }
+
+        FirebaseDatabase db   = FirebaseDatabase.getInstance ();
+        FirebaseUser user = auth.getCurrentUser();
+
+        DatabaseReference reference = db.getReference ("users")
+                                        .child (user.getUid ())
+                                        .child ("wallets").push ();
+
         //New wallet initialized and ready
         //to be written into database
         //Just do it!
@@ -95,6 +110,7 @@ public class EditorWalletFragment extends EditorFragment {
                                     Wallet.Type.fetchType (type),
                                     Currency.getInstance (currency), title,
                                     checked, null);
+        reference.setValue (wallet.toMap ());
 
         Toast.makeText (getActivity(), "New wallet: " + title + ", added :)", Toast.LENGTH_SHORT).show();
 

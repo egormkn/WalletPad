@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -71,8 +72,14 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     private FloatingActionMenu menu;
     private long amount = 0;
 
-    private ValueEventListener listener;
+    private ValueEventListener summaryListener;
     private DatabaseReference operationsReference;
+
+    private ValueEventListener plansListener;
+    private DatabaseReference plansReference;
+
+    private ValueEventListener walletsListener;
+    private DatabaseReference walletsReference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,7 +107,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         plans = new ArrayList<>();
         Random r = new Random();
 
-        for (int i = 0; i < 30; i++) {
+        /*for (int i = 0; i < 30; i++) {
             plans.add (new Plan (i,
                     0,
                     Plan.Type.GIFT,
@@ -108,11 +115,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                     Currency.getInstance ("USD"),
                     "Buy gift",
                     "For my darling"));
-        }
+        }*/
 
         wallets = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        /*for (int i = 0; i < 10; i++) {
             wallets.add(new Wallet(43 + r.nextInt(700),
                     "0",
                     Wallet.Type.CARD,
@@ -121,7 +128,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                     true,
                     null
             ));
-        }
+        }*/
 
 
         for (WalletsListItem wallet : wallets) {
@@ -185,20 +192,28 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         tabSummaryRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         tabSummaryRecycler.setAdapter(operationsAdapter);
 
-        RecyclerView recyclerView2 = (RecyclerView) pagerAdapter.findViewById(R.id.tab_plans_recycler);
-        recyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView2.setAdapter(new PlansAdapter(getActivity(), plans));
+        tabPlansError = (TextView) pagerAdapter.findViewById (R.id.tab_plans_error);
+        tabPlansProgress = (ProgressBar) pagerAdapter.findViewById (R.id.tab_plans_progress);
+        tabPlansRecycler = (RecyclerView) pagerAdapter.findViewById (R.id.tab_plans_recycler);
 
-        RecyclerView recyclerView3 = (RecyclerView) pagerAdapter.findViewById(R.id.tab_wallets_recycler);
-        recyclerView3.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView3.setAdapter(new WalletsAdapter(getActivity(), wallets));
+        final PlansAdapter plansAdapter = new PlansAdapter (getActivity (), plans);
+        tabPlansRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        tabPlansRecycler.setAdapter(plansAdapter);
+
+        tabWalletsError = (TextView) pagerAdapter.findViewById (R.id.tab_wallets_error);
+        tabWalletsProgress = (ProgressBar) pagerAdapter.findViewById (R.id.tab_wallets_progress);
+        tabWalletsRecycler = (RecyclerView) pagerAdapter.findViewById (R.id.tab_wallets_recycler);
+
+        final WalletsAdapter walletsAdapter = new WalletsAdapter (getActivity (), wallets);
+        tabWalletsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        tabWalletsRecycler.setAdapter(walletsAdapter);
 
         operationsReference = FirebaseDatabase.getInstance()
                 .getReference("users")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("operations");
 
-        listener = new ValueEventListener() {
+        summaryListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 operations.clear();
@@ -228,6 +243,77 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             }
 
             @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+
+        FirebaseUser user = FirebaseAuth.getInstance ().getCurrentUser ();
+        plansReference = FirebaseDatabase.getInstance ()
+                                         .getReference ("users")
+                                         .child (user.getUid ())
+                                         .child ("plans");
+
+        plansListener = new ValueEventListener () {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                plans.clear ();
+
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Plan plan = new Plan (postSnapshot);
+                    plans.add (plan);
+                }
+
+                plansAdapter.notifyDataSetChanged ();
+
+                if (plans.size() > 0) {
+                    tabPlansProgress.setVisibility (View.GONE);
+                    tabPlansError.setVisibility    (View.GONE);
+                    tabPlansRecycler.setVisibility (View.VISIBLE);
+                } else {
+                    tabPlansProgress.setVisibility (View.GONE);
+                    tabPlansError.setVisibility    (View.VISIBLE);
+                    tabPlansError.setText          ("Plans not found");
+                    tabPlansRecycler.setVisibility (View.GONE);
+                }
+            }
+
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+
+        walletsReference = FirebaseDatabase.getInstance ()
+                                           .getReference ("users")
+                                           .child (user.getUid ())
+                                           .child ("wallets");
+
+        walletsListener = new ValueEventListener () {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                wallets.clear ();
+
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Wallet wallet = new Wallet (postSnapshot);
+                    wallets.add (wallet);
+                }
+
+                walletsAdapter.notifyDataSetChanged ();
+
+                if (wallets.size() > 0) {
+                    tabWalletsProgress.setVisibility (View.GONE);
+                    tabWalletsError.setVisibility    (View.GONE);
+                    tabWalletsRecycler.setVisibility (View.VISIBLE);
+                } else {
+                    tabWalletsProgress.setVisibility (View.GONE);
+                    tabWalletsError.setVisibility    (View.VISIBLE);
+                    tabWalletsError.setText          ("Wallets not found");
+                    tabWalletsRecycler.setVisibility (View.GONE);
+                }
+            }
+
             public void onCancelled(DatabaseError databaseError) {
                 // Getting Post failed, log a message
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
@@ -266,12 +352,16 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onStart() {
         super.onStart();
-        operationsReference.addValueEventListener(listener);
+        operationsReference.addValueEventListener(summaryListener);
+        plansReference.addValueEventListener (plansListener);
+        walletsReference.addValueEventListener (walletsListener);
     }
 
     @Override
     public void onStop() {
-        operationsReference.removeEventListener(listener);
+        operationsReference.removeEventListener(summaryListener);
+        plansReference.removeEventListener (plansListener);
+        walletsReference.removeEventListener (walletsListener);
         super.onStop();
     }
 }

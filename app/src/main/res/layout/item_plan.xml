@@ -86,6 +86,7 @@
         android:padding="6dp"
         android:textColor="#FFFFFF"
         android:background="@drawable/button_small"
-        android:text="Pay" />
+        android:text="Pay"
+        android:visibility="gone"/>
 
 </RelativeLayout>

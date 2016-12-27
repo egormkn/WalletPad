@@ -1,5 +1,7 @@
 package su.gear.walletpad.model;
 
+import com.google.firebase.database.DataSnapshot;
+
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +77,16 @@ public class Wallet implements WalletsListItem {
      */
     private List<Operation> operations;
 
+    public Wallet (DataSnapshot snapshot) {
+        this.id = "0";
+        this.amount      = Double.parseDouble ((String) snapshot.child ("amount").getValue ());
+        this.type        = Type.fetchType ((String) snapshot.child ("type").getValue ());
+        this.currency    = Currency.getInstance ((String) snapshot.child ("currency").getValue ());
+        this.title       = (String) snapshot.child ("title").getValue ();
+        this.showInTotal = Boolean.parseBoolean ((String) snapshot.child ("intotal").getValue ());
+        this.operations  = null;
+    }
+
     public Wallet(double amount, String id, Type type, Currency currency, String title, boolean showInTotal, List<Operation> operations) {
         this.amount = amount;
         this.id = id;
@@ -113,9 +125,14 @@ public class Wallet implements WalletsListItem {
         return type;
     }
 
-    public Map<String, Object> toMap() {
-        Map<String, Object> map = new HashMap<>();
-        // TODO: Implement
-        return map;
+    public Map <String, Object> toMap () {
+        Map <String, Object> result = new HashMap <> ();
+        result.put ("amount",      amount + "");
+        result.put ("type",        type);
+        result.put ("currency",    currency.toString ());
+        result.put ("title",       title);
+        result.put ("intotal",     showInTotal + "");
+
+        return result;
     }
 }
