@@ -1,12 +1,9 @@
 package su.gear.walletpad.fragments;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +20,6 @@ import com.samsistemas.calendarview.decor.DayDecorator;
 import com.samsistemas.calendarview.widget.CalendarView;
 import com.samsistemas.calendarview.widget.DayView;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,9 +27,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
 import su.gear.walletpad.R;
+import su.gear.walletpad.model.Operation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -87,81 +83,111 @@ public class BudgetFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView (LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_budget, container, false);
     }
 
-    private int month = -1;
-    private Map <Integer, double []> storage;
+    private DatabaseReference  reference;
+    private ValueEventListener valueListener;
+    private SimpleDateFormat   dateFormat;
 
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    private Map <Integer, List <Double>> storage;
+
+    public void onViewCreated (View view, Bundle savedInstanceState) {
         super.onViewCreated (view, savedInstanceState);
-        storage = new HashMap <> ();
 
         final CalendarView calendar = (CalendarView) view.findViewById (R.id.calendar_view);
-        calendar.setFirstDayOfWeek (Calendar.MONDAY);
+        calendar.setFirstDayOfWeek        (Calendar.MONDAY);
         calendar.setIsOverflowDateVisible (false);
+        calendar.refreshCalendar          (Calendar.getInstance (Locale.getDefault ()));
+
+        calendar.setOnMonthChangedListener (new CalendarView.OnMonthChangedListener () {
+            public void onMonthChanged (Date monthDate) { changeMonth (calendar); }
+        });
 
         FirebaseUser user = FirebaseAuth.getInstance ().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase.getInstance ()
+        reference = FirebaseDatabase.getInstance ()
                 .getReference ("users")
                 .child (user.getUid ())
                 .child ("operations");
 
-        final SimpleDateFormat dateForm = new SimpleDateFormat ("yyyyMMdd.HHmmss");
+        dateFormat = new SimpleDateFormat ("yyyyMMdd.HHmmss", Locale.getDefault ());
+        storage    = new HashMap <> ();
 
-        reference.addValueEventListener(new ValueEventListener () {
+        valueListener = new ValueEventListener () {
             public void onDataChange (DataSnapshot dataSnapshot) {
-                Map <Integer, double []> newStorage = new HashMap <> ();
+                try {
+                    Map <Integer, List <Double>> tmpStorage = new HashMap <> ();
 
-                for (DataSnapshot snapshot: dataSnapshot.getChildren ()) {
-                    String dbDate = (String) snapshot.child ("date")
+                    for (DataSnapshot data: dataSnapshot.getChildren ()) {
+                        String dbDate = (String) data.child ("date")
                                                      .getValue ();
-                    try {
-                        Date date = dateForm.parse (dbDate);
-                        Calendar operationCalendar = Calendar.getInstance ();
-                        operationCalendar.setTime (date);
+                        Date date = dateFormat.parse (dbDate);
+                        Calendar nodeCalendar = Calendar.getInstance ();
+                        nodeCalendar.setTime (date);
 
-                        if (newStorage.get (operationCalendar.MONTH) == null) {
-                            newStorage.put (operationCalendar.MONTH, new double [31]);
+                        int year  = nodeCalendar.get (Calendar.YEAR);
+                        int month = nodeCalendar.get (Calendar.MONTH);
+                        int day   = nodeCalendar.get (Calendar.DAY_OF_MONTH);
+
+                        if (!tmpStorage.containsKey (year * 100 + month)) {
+                            tmpStorage.put (year * 100 + month, new ArrayList <Double> ());
+                            List <Double> currentList = tmpStorage.get (year * 100 + month);
+                            for (int i = 0; i < 31; i ++) { currentList.add (0D); }
                         }
 
-                        String dbAmount = (String) snapshot.child ("amount")
-                                                           .getValue ();
-                        Double amount = Double.parseDouble (dbAmount);
-                        int operationDay = operationCalendar.DAY_OF_MONTH;
+                        String dbAmount = (String) data.child ("amount")
+                                                       .getValue();
+                        dbAmount = dbAmount != null && dbAmount.length () > 0
+                                    ? dbAmount
+                                    : "0";
+                        double amount = Double.parseDouble (dbAmount);
 
-                        if (operationDay >= 0 && operationDay < 31) {
-                            newStorage.get (operationCalendar.MONTH)
-                                            [operationDay] += amount;
-                        }
-                    } catch (ParseException pe) {}
+                        double currentAmount = tmpStorage.get (year * 100 + month).get (day - 1);
+                        String dbType = (String) data.child ("type")
+                                                     .getValue ();
+                        Operation.Type type = Operation.Type.valueOf (dbType);
+                        if (type == Operation.Type.EXPENSE) { currentAmount *= -1; }
+                        tmpStorage.get (year * 100 + month).set (day - 1, currentAmount + amount);
+                    }
 
-                    System.out.println ("cdscsdcsd cnsdkcn ksdcsdjkc snck ksdc sck ckds ");
-                }
-
-                //Flush to working data
-                storage = newStorage;
+                    //Flush in real data
+                    storage = tmpStorage;
+                    changeMonth (calendar);
+                } catch (Exception e) { e.printStackTrace (); }
             }
 
-            public void onCancelled (DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError) {}
+        };
 
-            }
-        });
-
-        month = Calendar.getInstance ()
-                        .get (Calendar.MONTH);
-        month += 1; //Improve number to real
-
+        reference.addValueEventListener (valueListener);
         changeMonth (calendar);
+    }
+
+    private final List <String> months = new ArrayList <> (); {
+        months.add ("JANUARY");
+        months.add ("FEBRUARY");
+        months.add ("MARCH");
+        months.add ("APRIL");
+        months.add ("MAY");
+        months.add ("JUNE");
+        months.add ("JULY");
+        months.add ("AUGUST");
+        months.add ("SEPTEMBER");
+        months.add ("OCTOBER");
+        months.add ("NOVEMBER");
+        months.add ("DECEMBER");
     }
 
     private void changeMonth (final CalendarView calendar) {
         double tinf = 0, tsup = 0;
 
-        final List <Double> values = new ArrayList <> ();
+        int month = months.indexOf (calendar.getCurrentMonth ());
+        int year  = Integer.parseInt (calendar.getCurrentYear ());
+        final List <Double> values = loadValues (year, month);
+        System.out.println ("Data: " + values.size ());
 
         for (int i = 0; i < values.size (); i ++) {
             double value = values.get (i);
@@ -171,8 +197,13 @@ public class BudgetFragment extends Fragment {
 
         final double inf = tinf, sup = tsup;
 
-        final List <DayDecorator> decorators = new ArrayList <> ();
+        List <DayDecorator> decorators = new ArrayList <> ();
         decorators.add (new DayDecorator () {
+
+            {
+                System.out.println ("Day decorator - static");
+            }
+
             public void decorate (DayView day) {
                 String value = day.getText ().toString ();
                 int number = Integer.parseInt (value);
@@ -183,21 +214,37 @@ public class BudgetFragment extends Fragment {
                     else if (amount > 0) { day.setBackgroundColor (Color.argb (25 + (int) (75 * amount / sup), 0, 250, 0)); }
                 }
 
-                day.setOnClickListener (new View.OnClickListener() {
-                    public void onClick (View v) {
-                        calendar.setDecoratorsList (decorators);
-                        calendar.refreshCalendar (Calendar.getInstance (Locale.getDefault ()));
-                    }
+                day.setOnClickListener (new View.OnClickListener () {
+                    public void onClick (View v) {}
                 });
             }
         });
-        calendar.setDecoratorsList (decorators);
 
-        calendar.refreshCalendar (Calendar.getInstance (Locale.getDefault ()));
+        calendar.setDecoratorsList (decorators);
+        SimpleDateFormat date = new SimpleDateFormat ("yyyyMM", Locale.getDefault ());
+        Calendar currentMonth = Calendar.getInstance ();
+
+        try {
+            currentMonth.setTime (date.parse (year + ""
+                                    + (month + 1 < 10 ? "0" : "")
+                                    + (month + 1)));
+            calendar.refreshCalendar   (currentMonth);
+        } catch (Exception e) { e.printStackTrace (); }
     }
 
-    private void loadValues () {
+    private List <Double> loadValues (int year, int month) {
+        System.out.println ("Loading data for " + year + "-" + month);
+        if (storage.containsKey (year * 100 + month)) {
+            System.out.println ("Data for key " + (year * 100 + month) + " found");
+            return storage.get (year * 100 + month);
+        }
 
+        return new ArrayList <> ();
+    }
+
+    public void onStop () {
+        reference.removeEventListener (valueListener);
+        super.onStop ();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
