@@ -1,5 +1,7 @@
 package su.gear.walletpad.model;
 
+import com.google.firebase.database.DataSnapshot;
+
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
@@ -80,6 +82,17 @@ public class Plan implements PlansListItem {
      * */
     private final String description;
 
+    public Plan (DataSnapshot snapshot) {
+        this.id = 0L;
+        this.timestamp   = 0L;
+        this.type        = Type.fetchType ((String) snapshot.child ("type").getValue());
+        this.amount      = Double.parseDouble ((String) snapshot.child ("amount").getValue ());
+        //System.out.println ((String) snapshot.child ("amount").getValue ());
+        this.currency    = Currency.getInstance ((String) snapshot.child ("currency").getValue ());
+        this.title       = (String) snapshot.child ("title").getValue ();
+        this.description = (String) snapshot.child ("description").getValue ();
+    }
+
     public Plan (long id,
                  long time,
                  Type type,
@@ -108,7 +121,7 @@ public class Plan implements PlansListItem {
     public Map <String, Object> toMap () {
         Map <String, Object> result = new HashMap <> ();
         result.put ("time",        timestamp);
-        result.put ("amount",      amount);
+        result.put ("amount",      amount + "");
         result.put ("type",        type);
         result.put ("currency",    currency.toString ());
         result.put ("title",       title);

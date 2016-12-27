@@ -46,7 +46,7 @@ public class PlansAdapter extends RecyclerView.Adapter {
 
         PlanViewHolder planHolder =    (PlanViewHolder) holder;
         planHolder.title.setText       (plan.title ());
-        planHolder.amount.setText      (plan.amount () + "");
+        planHolder.amount.setText      (plan.amount () + " " + plan.currency ().getSymbol ());
         planHolder.description.setText (plan.description ());
     }
 
