@@ -57,26 +57,18 @@ public class EditorWalletFragment extends EditorFragment {
         considerEdit = (CheckBox) view.findViewById (R.id.edit_wallet_consider);
 
         currencyEdit.setOnItemSelectedListener (new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected (AdapterView <?> parent,
-                                        View itemSelected,
-                                        int selectedItemPosition,
-                                        long selectedId) {
-                currency = getResources ()
-                        .getStringArray (R.array.currencies)
-                        [selectedItemPosition];
+            public void onItemSelected (AdapterView <?> parent, View itemSelected,
+                                        int selectedItemPosition, long selectedId) {
+                currency = getResources().getStringArray (R.array.currencies)[selectedItemPosition];
             }
 
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         typeEdit.setOnItemSelectedListener (new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected (AdapterView <?> parent,
-                                        View itemSelected,
-                                        int selectedItemPosition,
-                                        long selectedId) {
-                type = getResources ()
-                        .getStringArray (R.array.wallets_type)
-                         [selectedItemPosition];
+            public void onItemSelected (AdapterView <?> parent, View itemSelected,
+                                        int selectedItemPosition, long selectedId) {
+                type = getResources().getStringArray (R.array.wallets_type)[selectedItemPosition];
             }
 
             public void onNothingSelected(AdapterView<?> parent) {}
@@ -106,14 +98,15 @@ public class EditorWalletFragment extends EditorFragment {
         //New wallet initialized and ready
         //to be written into database
         //Just do it!
-        Wallet wallet = new Wallet (amountValue, id,
+        Wallet wallet = new Wallet (amountValue,
+                                    id,
                                     Wallet.Type.fetchType (type),
-                                    Currency.getInstance (currency), title,
-                                    checked, null);
+                                    Currency.getInstance (currency),
+                                    title,
+                                    checked,
+                                    null);
         reference.setValue (wallet.toMap ());
-
         Toast.makeText (getActivity(), "New wallet: " + title + ", added :)", Toast.LENGTH_SHORT).show();
-
         return true;
     }
 }

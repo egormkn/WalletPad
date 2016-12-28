@@ -55,26 +55,17 @@ public class EditorPlanFragment extends EditorFragment {
         typeEdit     = (Spinner) view.findViewById (R.id.edit_plan_type);
 
         currencyEdit.setOnItemSelectedListener (new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected (AdapterView <?> parent,
-                                        View itemSelected,
-                                        int selectedItemPosition,
-                                        long selectedId) {
-                currency = getResources ()
-                            .getStringArray (R.array.currencies)
-                                [selectedItemPosition];
+            public void onItemSelected (AdapterView <?> parent, View itemSelected,
+                                        int selectedItemPosition, long selectedId) {
+                currency = getResources().getStringArray (R.array.currencies)[selectedItemPosition];
             }
-
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         typeEdit.setOnItemSelectedListener (new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected (AdapterView <?> parent,
-                                        View itemSelected,
-                                        int selectedItemPosition,
-                                        long selectedId) {
-                type = getResources ()
-                        .getStringArray (R.array.plans_type)
-                            [selectedItemPosition];
+            public void onItemSelected (AdapterView <?> parent, View itemSelected,
+                                        int selectedItemPosition, long selectedId) {
+                type = getResources().getStringArray (R.array.plans_type)[selectedItemPosition];
             }
 
             public void onNothingSelected(AdapterView<?> parent) {}
@@ -90,9 +81,7 @@ public class EditorPlanFragment extends EditorFragment {
         String desc   = descEdit.getText   ().toString ();
 
         if (title == null || title.length () < 1) {
-            Toast.makeText (getActivity (),
-                            "Please, enter a title",
-                            Toast.LENGTH_SHORT).show ();
+            Toast.makeText (getActivity (), "Please, enter a title", Toast.LENGTH_SHORT).show ();
             return false;
         }
 
@@ -116,16 +105,16 @@ public class EditorPlanFragment extends EditorFragment {
         //New plan initialized and ready
         //to be written into database
         //Just do it!
-        Plan plan = new Plan (id, time,
+        Plan plan = new Plan (id,
+                              time,
                               typeValue,
                               amountValue,
                               currencyISO,
-                              title, desc);
+                              title,
+                              desc);
 
         reference.setValue (plan.toMap ());
-
         Toast.makeText (getActivity(), "New plan: " + title + ", added :)", Toast.LENGTH_SHORT).show();
-
         return true;
     }
 

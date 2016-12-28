@@ -43,7 +43,7 @@ public class EditorOperationFragment extends EditorFragment {
         categories.add("Food");
         categories.add("Transport");
         categories.add("Medicine");
-        categories.add("Internet");
+        categories.add("Hobby");
     }
 
     @Override
