@@ -97,20 +97,19 @@
         <item>OTHER</item>
     </string-array>
 
-
     <string-array name="months">
-        <item>января</item>
-        <item>февраля</item>
-        <item>марта</item>
-        <item>апреля</item>
-        <item>мая</item>
-        <item>июня</item>
-        <item>июля</item>
-        <item>августа</item>
-        <item>сентября</item>
-        <item>октября</item>
-        <item>ноября</item>
-        <item>декабря</item>
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
     </string-array>
 
     <string name="category_expense_food">Food</string>
@@ -125,8 +124,9 @@
     <string name="category_expense_gifts">Gifts</string>
     <string name="category_expense_other">Other</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="logout">Logout</string>
+    <string name="no_data_available">No data available</string>
+    <string name="data_loading_error">Error while loading data</string>
+
 
 </resources>

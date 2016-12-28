@@ -112,26 +112,6 @@ public class MainActivity extends AppCompatActivity
             Glide.with(this).load(photoUrl).into((CircleImageView) userInfo.findViewById(R.id.avatar));
         }
 
-        /*
-        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                boolean connected = snapshot.getValue(Boolean.class);
-                if (connected) {
-                    Log.e(TAG, "CONNECTED");
-                } else {
-                    Log.e(TAG, "DISCONNECTED");
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                System.err.println("Listener was cancelled");
-            }
-        });
-        */
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.main_fragment_container, new SummaryFragment()).commit();
     }

@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,9 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
-import java.util.Random;
 
 import su.gear.walletpad.EditActivity;
 import su.gear.walletpad.R;
@@ -70,7 +67,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     private TextView totalAmount;
     private FloatingActionMenu menu;
-    private long amount = 0;
+    private double amount = 0;
 
     private ValueEventListener summaryListener;
     private DatabaseReference operationsReference;
@@ -85,59 +82,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         operations = new ArrayList<>();
-
-        /*for (int i = 0; i < 20; i++) {
-            if (i % 5 == 0) {
-                operations.add(new Separator("30 ноября 2016"));
-            }
-
-            operations.add(new Operation(
-                    100.0,
-                    "id",
-                    Operation.Type.INCOME,
-                    new Date(),
-                    Currency.getInstance("RUB"),
-                    "Wallet",
-                    "Description",
-                    "Category",
-                    new ArrayList<>(Arrays.asList("Buenos Aires", "Córdoba", "La Plata"))));
-
-        }*/
-
         plans = new ArrayList<>();
-        Random r = new Random();
-
-        /*for (int i = 0; i < 30; i++) {
-            plans.add (new Plan (i,
-                    0,
-                    Plan.Type.GIFT,
-                    3 + r.nextInt(30),
-                    Currency.getInstance ("USD"),
-                    "Buy gift",
-                    "For my darling"));
-        }*/
-
         wallets = new ArrayList<>();
-
-        /*for (int i = 0; i < 10; i++) {
-            wallets.add(new Wallet(43 + r.nextInt(700),
-                    "0",
-                    Wallet.Type.CARD,
-                    Currency.getInstance ("RUB"),
-                    "Bank #" + (i + 1),
-                    true,
-                    null
-            ));
-        }*/
-
-
-        for (WalletsListItem wallet : wallets) {
-            if (wallet instanceof Wallet) {
-                amount += ((Wallet) wallet).getAmount();
-            }
-        }
-
-        //operations.add(new RecyclerButton());
         setHasOptionsMenu(true);
     }
 
@@ -148,12 +94,10 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        TextView summaryAmount = (TextView) view.findViewById(R.id.summary_amount);
+        final TextView summaryAmount = (TextView) view.findViewById(R.id.summary_amount);
         summaryAmount.setText(String.valueOf(amount) + " $");
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-
-
         final View overlay = view.findViewById(R.id.overlay);
         menu = (FloatingActionMenu) view.findViewById(R.id.add_menu);
         menu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
@@ -192,25 +136,27 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         tabSummaryRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         tabSummaryRecycler.setAdapter(operationsAdapter);
 
-        tabPlansError = (TextView) pagerAdapter.findViewById (R.id.tab_plans_error);
-        tabPlansProgress = (ProgressBar) pagerAdapter.findViewById (R.id.tab_plans_progress);
-        tabPlansRecycler = (RecyclerView) pagerAdapter.findViewById (R.id.tab_plans_recycler);
+        tabPlansError = (TextView) pagerAdapter.findViewById(R.id.tab_plans_error);
+        tabPlansProgress = (ProgressBar) pagerAdapter.findViewById(R.id.tab_plans_progress);
+        tabPlansRecycler = (RecyclerView) pagerAdapter.findViewById(R.id.tab_plans_recycler);
 
-        final PlansAdapter plansAdapter = new PlansAdapter (getActivity (), plans);
+        final PlansAdapter plansAdapter = new PlansAdapter(getActivity(), plans);
         tabPlansRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         tabPlansRecycler.setAdapter(plansAdapter);
 
-        tabWalletsError = (TextView) pagerAdapter.findViewById (R.id.tab_wallets_error);
-        tabWalletsProgress = (ProgressBar) pagerAdapter.findViewById (R.id.tab_wallets_progress);
-        tabWalletsRecycler = (RecyclerView) pagerAdapter.findViewById (R.id.tab_wallets_recycler);
+        tabWalletsError = (TextView) pagerAdapter.findViewById(R.id.tab_wallets_error);
+        tabWalletsProgress = (ProgressBar) pagerAdapter.findViewById(R.id.tab_wallets_progress);
+        tabWalletsRecycler = (RecyclerView) pagerAdapter.findViewById(R.id.tab_wallets_recycler);
 
-        final WalletsAdapter walletsAdapter = new WalletsAdapter (getActivity (), wallets);
+        final WalletsAdapter walletsAdapter = new WalletsAdapter(getActivity(), wallets);
         tabWalletsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         tabWalletsRecycler.setAdapter(walletsAdapter);
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         operationsReference = FirebaseDatabase.getInstance()
                 .getReference("users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child(user.getUid())
                 .child("operations");
 
         summaryListener = new ValueEventListener() {
@@ -244,80 +190,85 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
+                tabSummaryProgress.setVisibility(View.GONE);
+                tabSummaryError.setVisibility(View.VISIBLE);
+                tabSummaryError.setText(R.string.data_loading_error);
+                tabSummaryRecycler.setVisibility(View.GONE);
             }
         };
 
-        FirebaseUser user = FirebaseAuth.getInstance ().getCurrentUser ();
-        plansReference = FirebaseDatabase.getInstance ()
-                                         .getReference ("users")
-                                         .child (user.getUid ())
-                                         .child ("plans");
+        plansReference = FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(user.getUid())
+                .child("plans");
 
-        plansListener = new ValueEventListener () {
+        plansListener = new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
-                plans.clear ();
+                plans.clear();
 
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Plan plan = new Plan (postSnapshot);
-                    plans.add (plan);
+                    Plan plan = new Plan(postSnapshot);
+                    plans.add(plan);
                 }
 
-                plansAdapter.notifyDataSetChanged ();
+                plansAdapter.notifyDataSetChanged();
 
                 if (plans.size() > 0) {
-                    tabPlansProgress.setVisibility (View.GONE);
-                    tabPlansError.setVisibility    (View.GONE);
-                    tabPlansRecycler.setVisibility (View.VISIBLE);
+                    tabPlansProgress.setVisibility(View.GONE);
+                    tabPlansError.setVisibility(View.GONE);
+                    tabPlansRecycler.setVisibility(View.VISIBLE);
                 } else {
-                    tabPlansProgress.setVisibility (View.GONE);
-                    tabPlansError.setVisibility    (View.VISIBLE);
-                    tabPlansError.setText          ("Plans not found");
-                    tabPlansRecycler.setVisibility (View.GONE);
+                    tabPlansProgress.setVisibility(View.GONE);
+                    tabPlansError.setVisibility(View.VISIBLE);
+                    tabPlansError.setText("Plans not found");
+                    tabPlansRecycler.setVisibility(View.GONE);
                 }
             }
 
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
+                tabPlansProgress.setVisibility(View.GONE);
+                tabPlansError.setVisibility(View.VISIBLE);
+                tabPlansError.setText(R.string.data_loading_error);
+                tabPlansRecycler.setVisibility(View.GONE);
             }
         };
 
-        walletsReference = FirebaseDatabase.getInstance ()
-                                           .getReference ("users")
-                                           .child (user.getUid ())
-                                           .child ("wallets");
+        walletsReference = FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(user.getUid())
+                .child("wallets");
 
-        walletsListener = new ValueEventListener () {
+        walletsListener = new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
-                wallets.clear ();
-
+                wallets.clear();
+                amount = 0;
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Wallet wallet = new Wallet (postSnapshot);
-                    wallets.add (wallet);
+                    Wallet wallet = new Wallet(postSnapshot);
+                    wallets.add(wallet);
+                    amount += wallet.getAmount();
                 }
 
-                walletsAdapter.notifyDataSetChanged ();
+                summaryAmount.setText(String.valueOf(amount) + " $");
+
+                walletsAdapter.notifyDataSetChanged();
 
                 if (wallets.size() > 0) {
-                    tabWalletsProgress.setVisibility (View.GONE);
-                    tabWalletsError.setVisibility    (View.GONE);
-                    tabWalletsRecycler.setVisibility (View.VISIBLE);
+                    tabWalletsProgress.setVisibility(View.GONE);
+                    tabWalletsError.setVisibility(View.GONE);
+                    tabWalletsRecycler.setVisibility(View.VISIBLE);
                 } else {
-                    tabWalletsProgress.setVisibility (View.GONE);
-                    tabWalletsError.setVisibility    (View.VISIBLE);
-                    tabWalletsError.setText          ("Wallets not found");
-                    tabWalletsRecycler.setVisibility (View.GONE);
+                    tabWalletsProgress.setVisibility(View.GONE);
+                    tabWalletsError.setVisibility(View.VISIBLE);
+                    tabWalletsError.setText("Wallets not found");
+                    tabWalletsRecycler.setVisibility(View.GONE);
                 }
             }
 
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
+                tabWalletsProgress.setVisibility(View.GONE);
+                tabWalletsError.setVisibility(View.VISIBLE);
+                tabWalletsError.setText(R.string.data_loading_error);
+                tabWalletsRecycler.setVisibility(View.GONE);
             }
         };
     }
@@ -353,15 +304,15 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
         operationsReference.addValueEventListener(summaryListener);
-        plansReference.addValueEventListener (plansListener);
-        walletsReference.addValueEventListener (walletsListener);
+        plansReference.addValueEventListener(plansListener);
+        walletsReference.addValueEventListener(walletsListener);
     }
 
     @Override
     public void onStop() {
         operationsReference.removeEventListener(summaryListener);
-        plansReference.removeEventListener (plansListener);
-        walletsReference.removeEventListener (walletsListener);
+        plansReference.removeEventListener(plansListener);
+        walletsReference.removeEventListener(walletsListener);
         super.onStop();
     }
 }
