@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,17 +113,21 @@ public class StatisticsFragment extends Fragment {
         xStackedBarAxis.setDrawAxisLine(false);
         xStackedBarAxis.setTextSize(9f);
         xStackedBarAxis.setAxisMinimum(0f);
-        xStackedBarAxis.setAxisMaximum(110f);
+        xStackedBarAxis.setAxisMaximum(60f);
         xStackedBarAxis.setCenterAxisLabels(true);
-        xStackedBarAxis.setLabelCount(6);
-        xStackedBarAxis.setGranularity(10f);
+//        xStackedBarAxis.setLabelCount(6);
+//        xStackedBarAxis.setGranularity(10f);
         xStackedBarAxis.setValueFormatter(new IAxisValueFormatter() {
             private DecimalFormat format = new DecimalFormat("###");
 
             String []xLabels = new String[]{"January", "February", "March", "April", "May", "June"};
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return format.format(value);
+                Log.e("XXX", value+"");
+                int t = ((int)value)/10;
+                t = t <= 0 ? 0 : t;
+                t %= 6;
+                return xLabels[t];//TODO: DELETE crutch for presentation
             }
         });
         mStackedBarChart.invalidate();
@@ -158,9 +163,9 @@ public class StatisticsFragment extends Fragment {
 
         // IMPORTANT: When using negative values in stacked bars, always make sure the negative values are in the array first
         ArrayList<BarEntry> yValues = new ArrayList<BarEntry>();
-        yValues.add(new BarEntry(5,  new float[]{ -100, 10 }));
+        yValues.add(new BarEntry(5,  new float[]{ -100, 60 }));
         yValues.add(new BarEntry(15, new float[]{ -602, 139 }));
-        yValues.add(new BarEntry(25, new float[]{ -15, 1500 }));
+        yValues.add(new BarEntry(25, new float[]{ -40, 1500 }));
         yValues.add(new BarEntry(35, new float[]{ -307, 407 }));
         yValues.add(new BarEntry(45, new float[]{ -190, 240 }));
         yValues.add(new BarEntry(55, new float[]{ -90 , 30 }));
@@ -174,6 +179,7 @@ public class StatisticsFragment extends Fragment {
         set.setStackLabels(new String[]{
                 "Expense", "Income"
         });
+
 
         BarData data = new BarData(set);
         data.setBarWidth(8.5f);
