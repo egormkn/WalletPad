@@ -1,5 +1,6 @@
 package su.gear.walletpad.model;
 
+import android.content.Context;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
@@ -136,7 +137,18 @@ public class Operation implements OperationsListItem {
 
     public enum Category {
 
-        CLOTHES(R.string.category_expense_clothes, R.drawable.category_expense_clothes, R.color.colorAccent);
+        FOOD(R.string.category_expense_food, R.drawable.ic_default, R.color.flatColor1),
+        CLOTHES(R.string.category_expense_clothes, R.drawable.category_expense_clothes, R.color.flatColor2),
+        HOUSE(R.string.category_expense_house, R.drawable.ic_default, R.color.flatColor3),
+        MEDICINE(R.string.category_expense_medicine, R.drawable.ic_default, R.color.flatColor4),
+        TRANSPORT(R.string.category_expense_transport, R.drawable.ic_default, R.color.flatColor5),
+        EDUCATION(R.string.category_expense_education, R.drawable.ic_default, R.color.flatColor6),
+        ENTERTAINMENT(R.string.category_expense_entertainment, R.drawable.ic_default, R.color.flatColor6),
+        WORK(R.string.category_expense_work, R.drawable.ic_default, R.color.flatColor6),
+        INTERNET(R.string.category_expense_internet, R.drawable.ic_default, R.color.flatColor6),
+        GIFTS(R.string.category_expense_gifts, R.drawable.ic_default, R.color.flatColor6),
+        HOBBY(R.string.category_expense_hobby, R.drawable.ic_default, R.color.flatColor6),
+        OTHER(R.string.category_expense_other, R.drawable.ic_default, R.color.flatColor6);
 
         @StringRes
         private final int title;
@@ -153,6 +165,16 @@ public class Operation implements OperationsListItem {
             this.color = color;
         }
 
+        public int getColor() {
+            return color;
+        }
 
+        public int getIcon() {
+            return icon;
+        }
+
+        public String getTitle(Context context) {
+            return context.getResources().getString(title);
+        }
     }
 }

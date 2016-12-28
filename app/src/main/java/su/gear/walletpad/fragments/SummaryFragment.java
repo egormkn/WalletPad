@@ -38,7 +38,6 @@ import su.gear.walletpad.model.Operation;
 import su.gear.walletpad.model.OperationsListItem;
 import su.gear.walletpad.model.Plan;
 import su.gear.walletpad.model.PlansListItem;
-import su.gear.walletpad.model.RecyclerButton;
 import su.gear.walletpad.model.Separator;
 import su.gear.walletpad.model.Wallet;
 import su.gear.walletpad.model.WalletsListItem;
@@ -68,6 +67,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     private TextView totalAmount;
     private FloatingActionMenu menu;
     private double amount = 0;
+    private double spent = 0;
 
     private ValueEventListener summaryListener;
     private DatabaseReference operationsReference;
@@ -95,7 +95,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         final TextView summaryAmount = (TextView) view.findViewById(R.id.summary_amount);
-        summaryAmount.setText(String.valueOf(amount) + " $");
+        summaryAmount.setText(String.valueOf(amount - spent) + " $");
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         final View overlay = view.findViewById(R.id.overlay);
@@ -163,6 +163,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 operations.clear();
+                spent = 0;
                 String lastDate = "";
                 SimpleDateFormat dateFormat = DateUtils.getDateFormat(getContext());
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -173,8 +174,9 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                         operations.add(new Separator(operationDate));
                     }
                     operations.add(operation);
+                    spent += operation.getAmount();
                 }
-                operations.add(new RecyclerButton("Show all"));
+                //operations.add(new RecyclerButton("Show all"));
                 operationsAdapter.notifyDataSetChanged();
                 if (operations.size() > 0) {
                     tabSummaryProgress.setVisibility(View.GONE);
@@ -248,7 +250,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                     amount += wallet.getAmount();
                 }
 
-                summaryAmount.setText(String.valueOf(amount) + " $");
+                summaryAmount.setText(String.valueOf(amount - spent) + " $");
 
                 walletsAdapter.notifyDataSetChanged();
 

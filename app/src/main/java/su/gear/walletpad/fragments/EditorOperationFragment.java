@@ -39,11 +39,9 @@ public class EditorOperationFragment extends EditorFragment {
         currencies.add("EUR");
 
         categories = new ArrayList<>();
-        categories.add("Home");
-        categories.add("Food");
-        categories.add("Transport");
-        categories.add("Medicine");
-        categories.add("Hobby");
+        for (Operation.Category category : Operation.Category.values()) {
+            categories.add(category.getTitle(getActivity()));
+        }
     }
 
     @Override

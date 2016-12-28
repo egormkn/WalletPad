@@ -36,4 +36,25 @@
     <color name="colorExpense">#DA4336</color>
     <color name="colorExpensePressed">#E75043</color>
     <color name="colorExpenseRipple">#99FFFFFF</color>
+
+    <!-- Colors from materialuicolors.co -->
+    <color name="flatColor1">#F44336</color>
+    <color name="flatColor2">#E91E63</color>
+    <color name="flatColor3">#9C27B0</color>
+    <color name="flatColor4">#673AB7</color>
+    <color name="flatColor5">#3F51B5</color>
+    <color name="flatColor6">#2196F3</color>
+    <color name="flatColor7">#03A9F4</color>
+    <color name="flatColor8">#00BCD4</color>
+    <color name="flatColor9">#009688</color>
+    <color name="flatColor10">#4CAF50</color>
+    <color name="flatColor11">#8BC34A</color>
+    <color name="flatColor12">#CDDC39</color>
+    <color name="flatColor13">#FFEB3B</color>
+    <color name="flatColor14">#FFC107</color>
+    <color name="flatColor15">#FF9800</color>
+    <color name="flatColor16">#FF5722</color>
+    <color name="flatColor17">#795548</color>
+    <color name="flatColor18">#9E9E9E</color>
+    <color name="flatColor19">#607D8B</color>
 </resources>

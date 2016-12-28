@@ -5,16 +5,25 @@
     tools:context="su.gear.walletpad.fragments.OperationsFragment">
 
     <TextView
+        android:id="@+id/fragment_operations_error"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:text="No data available"
+        android:gravity="center"
+        android:text="@string/no_data_available"
         android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/fragment_operations_progress"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_operations_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:visibility="gone" />
 
 </FrameLayout>

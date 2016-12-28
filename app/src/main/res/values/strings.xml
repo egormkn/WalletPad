@@ -122,6 +122,7 @@
     <string name="category_expense_work">Work</string>
     <string name="category_expense_internet">Internet</string>
     <string name="category_expense_gifts">Gifts</string>
+    <string name="category_expense_hobby">Hobby</string>
     <string name="category_expense_other">Other</string>
 
     <string name="logout">Logout</string>
