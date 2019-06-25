@@ -15,11 +15,43 @@
       },
       "oauth_client": [
         {
+          "client_id": "332933317887-2dh6gqiadit6er05okvbeulhjh1duq7d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "su.gear.walletpad",
+            "certificate_hash": "13ff18bc015bbcd4c6ce938cee207d680d21f3b0"
+          }
+        },
+        {
+          "client_id": "332933317887-db6eovikug3otk98aadvr63fn22680gu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "su.gear.walletpad",
+            "certificate_hash": "497041393ab7f59a51d95238b63eda6e97cb1b64"
+          }
+        },
+        {
+          "client_id": "332933317887-nkh7eimc1alsuo51d7i7rdsgdangeqcc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "su.gear.walletpad",
+            "certificate_hash": "f757f8286e507d00a86d676002f5cedbfe703f16"
+          }
+        },
+        {
           "client_id": "332933317887-nrpoqr5hfs048dlvdac8cm2qjadsil7v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "su.gear.walletpad",
-            "certificate_hash": "E27889BB35AFEEE1618FD7E819F4F93886A17303"
+            "certificate_hash": "e27889bb35afeee1618fd7e819f4f93886a17303"
+          }
+        },
+        {
+          "client_id": "332933317887-588bh18goc9tqbju6ru0ef6ta3gik9pn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "su.gear.walletpad",
+            "certificate_hash": "cf467d2d4d58cab5bdaf8874307e5a31ccaf66f4"
           }
         },
         {
